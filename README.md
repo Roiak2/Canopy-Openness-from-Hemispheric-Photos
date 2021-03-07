@@ -1,28 +1,23 @@
-# Hack-the-planet-project
+# Canopy Openness from Hemispheric Photos
 
-## Project pre-proposal outline for EEEB 4050, Spring 2021 (in development)
----
+Canopy openness - the amount of light penetrating a canopy - is a crucial metric in understanding ecosystem dynamics and function, especially after a disturbance like a fire or a cyclone.
 
-### Description of Project Goals:
-This package will take input of hemispheric photos and output a dataframe and plots estimating light exposure for each photo and in bulk for many photos.
+This package assists foresters by taking an input of hemispheric photos, calculating canopy openness for the photos, and outputting a dataframe with the results, as well as pretty plots.
 
-### Description of Code:
-The program will contain many functions to calculate light exposure based on hemispheric photos:
-   - Normalize light exposure from the input photo file (contrast and exposure)
-   - Convert photo to black and white or greyscale
-   - Calculate what is *sunlight* and what is *not sun* (white vs. black)
-   - Calculate % light per area of photo
-   - Plot results
-   - Save light exposure results and photo information in a csv file  
+### In Development
 
-### Description of Data:
-**Inputs -** 
-   - jpeg or png files of hemispheric photos
-   - location, date, and/or other identifying information of each photo (either in csv file or in the photo file name)  
+This program can be installed this way:
 
-**Outputs -** 
-   - jpegs or png files of plots of light amount & photosynthetically active radiation (PAR)
-   - csv file of light exposure per photo with columns identifying location/time of each photo
+```
+#install dependency pacakages
+conda install pandas, toyplot, numpy, scikit-image -c conda-forge 
 
-### Description of User Interface:
-Coming soon...
+#clone repository of package
+git clone [https://github.com/Roiak2/Canopy-Openness-from-Hemispheric-Photos]
+
+#enter into the cloned directory
+cd ./Canopy-Openness-from-Hemispheric-Photos
+
+#install onto your machine
+pip install -e .
+```
