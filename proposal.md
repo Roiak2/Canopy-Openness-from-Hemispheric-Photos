@@ -8,6 +8,32 @@ Canopy openness - the amount of light penetrating a canopy - is a crucial metric
 
 This package assists foresters by taking an input of hemispheric photos, calculating canopy openness for the photos, and outputting a dataframe with the results, as well as pretty plots.
 
+Currently there is a demo Jupyter Notebook found in the package for a user to try and test out the functions on their own images.
+
+### File structure of package:
+.
+├── CanOpenness
+│   ├── CanOpen.py
+│   ├── CanOpenness Demo Script.ipynb
+│   └── __init__.py
+├── README.md
+├── Sample Photos
+│   ├── Sample_Photo.JPG
+│   ├── Sample_Photo_Threshold.jpg
+│   └── Test Photos
+│       ├── LFDP.394.12Dec2017.EV-2.AF.JPG
+│       ├── LFDP.400.11Dec2017.EV0.M.JPG
+│       ├── LFDP.403.11Dec2017.EV0.AF.JPG
+│       └── LFDP.406.11Dec2017.EV0.AF.JPG
+├── proposal.md
+└── setup.py
+
+Dependencies and libraries for this package include:
+  1. 'pandas': to output and store results in a dataframe  
+  2. 'numpy': to carry out statistical calculations 
+  3. 'skimage': to threshold colors in inputted images  
+  4. 'pathlib': to handle multiple files at once from a directory
+
 ### User Input and Interface
 The program requires the user to input image files. These will be jpeg or png files and should be fisheye photos.
 
@@ -46,9 +72,10 @@ Therefore this program uses a Python API so users can interactively tweak and vi
 
 A csv output example:
 
-| Photo | lon | Month | Canopy_Openness |
-|-------|-----|-------|-----------------|
-| 1A    | 73.4| May   | 64.5            |
+| Photo | lon  | Month | Canopy_Openness |
+|-------|------|-------|-----------------|
+| 1A    | 73.4 | May   | 64.5            |
+| 1B    | 73.45| May   | 34.7            |
 
 A photo example showing black and white for canopy vs. sky:
 
