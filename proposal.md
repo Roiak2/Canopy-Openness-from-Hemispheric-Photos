@@ -32,10 +32,10 @@ Currently there is a demo Jupyter Notebook found in the package for a user to tr
 ```
 
 Dependencies and libraries for this package include:
-  1. 'pandas': to output and store results in a dataframe  
-  2. 'numpy': to carry out statistical calculations 
-  3. 'skimage': to threshold colors in inputted images  
-  4. 'pathlib': to handle multiple files at once from a directory
+  1. `pandas`: to output and store results in a dataframe  
+  2. `numpy`: to carry out statistical calculations 
+  3. `skimage`: to threshold colors in inputted images  
+  4. `pathlib`: to handle multiple files at once from a directory
 
 ### User Input and Interface
 The program requires the user to input image files. These will be jpeg or png files and should be fisheye photos.
