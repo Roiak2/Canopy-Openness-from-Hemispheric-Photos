@@ -11,6 +11,8 @@ This package assists foresters by taking an input of hemispheric photos, calcula
 Currently there is a demo Jupyter Notebook found in the package for a user to try and test out the functions on their own images.
 
 ### File structure of package:
+
+```bash
 .
 ├── CanOpenness
 │   ├── CanOpen.py
@@ -27,6 +29,7 @@ Currently there is a demo Jupyter Notebook found in the package for a user to tr
 │       └── LFDP.406.11Dec2017.EV0.AF.JPG
 ├── proposal.md
 └── setup.py
+```
 
 Dependencies and libraries for this package include:
   1. 'pandas': to output and store results in a dataframe  
