@@ -15,19 +15,22 @@ Calculating canopy openness from hemispheric photos
 #-------------------------------------------------------------------------------------------
 
 #Importing packages
+import glob #helping identify files in pathfiles
+import os #finding pathfiles
+
 import skimage #image manipulation
 from skimage import io
 from skimage.feature import canny
 from skimage.draw import circle_perimeter
 from skimage.util import img_as_ubyte
 from skimage.filters import threshold_otsu #threshold algorithm
+from skimage.color import rgb2gray
 import pathlib #getting pathfiles
 import pandas #dataframe manipulation and outputting
 import numpy as np #statistical calculations
-import glob #helping identify files in pathfiles
-import os #finding pathfiles
 import natsort #batch loading of files
 import matplotlib.pyplot as plt #plots
+from loguru import logger
 
 #-------------------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------------------
@@ -50,11 +53,12 @@ def imageLoad(filepath, filename):
     filename - name of image (with jpg, png ending)
     """
     #uploading photo based on given path and image name
-    photo_location = os.path.join(filepath,filename) 
+    photo_location = os.path.join(filepath, filename) 
     #reading image file using io.imread from skimage
     photo = io.imread(photo_location) 
     #plot photo
     plt.imshow(photo)
+    logger.debug(f"loaded image: {filename}")
     #return photo
     return photo
 
@@ -71,7 +75,8 @@ def BluePic(image = ""):
     image[:,:,0] = 0
     image[:,:,1] = 0
     #plot photo
-    plt.imshow(image)  
+    plt.imshow(image)
+    logger.debug(f"converted image to blue...")
     #return photo
     return image
 
@@ -94,6 +99,7 @@ def bwPic(image = ""):
     binary = gray_image > th
     #plots image
     plt.imshow(binary,cmap=plt.cm.gray)
+    logger.debug(f"converted image to BW ...threshold...")
     #returns it
     return binary
 
