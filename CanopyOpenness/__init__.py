@@ -18,10 +18,10 @@ def set_loglevel(loglevel="INFO"):
     """
     config = {}
     config["handlers"] = [{
-        "sink": sys.stdout,  # sys.stderr
+        "sink": sys.stdout,  # or sys.stderr, or a filename, ...
         "format": "{time:hh:mm} | {level: <7} | <b><magenta>{function: <15}</magenta></b> | <level>{message}</level>",
         "level": loglevel,
-        "colorize": True, # sys.stdout.isatty() 
+        "colorize": True, # sys.stdout.isatty() will only use color when supported.
     }]
     logger.configure(**config)
     logger.enable("CanopyOpenness")
