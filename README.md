@@ -21,3 +21,10 @@ cd ./Canopy-Openness-from-Hemispheric-Photos
 #install onto your machine
 pip install -e .
 ```
+
+### Working example
+
+After loading the program in your machine, you can go to the ImageLoad_WorkingExample jupyter notebook found in the top directory of this repo.
+
+That notebook contains a sample workflow for you to test the ImageLoad module with a sample photo (you can try it on your own pictures as well).
+
