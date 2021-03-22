@@ -122,4 +122,4 @@ class ImagePrep():
         #debugging logger message
         logger.debug(f"converted image to BW ...threshold...")
         #returns it
-        #return self.binary
+        return self.binary
