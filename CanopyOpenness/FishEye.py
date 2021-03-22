@@ -53,6 +53,7 @@ class FishEye():
         
         #output of new image with center coordinates added
         self.ImageCircle = ""
+        self.circleImage = ""
 
     #function for adding center coordinates of image and radius of center
     def CircleCoords(self):
@@ -78,9 +79,9 @@ class FishEye():
         #logger debugging statement
         logger.debug(f"Set center circle...fisheye...coordinates")
         #plotting to check
-        plt.imshow(self.ImageCircle[0])
+        plt.imshow(self.ImageCircle[0],cmap=plt.cm.gray)
         #return new format of image
-        return self.ImageCircle
+        #return self.ImageCircle
 
     #function for setting circle based on the calculated center circle radius
     def SetCircle(self):
@@ -93,17 +94,20 @@ class FishEye():
         self.cy = center y coordinate
         self.cr = radius of center circle of fisheye lens
         """
+        #intializing photo from ImageCircle
+        self.circleImage = self.ImageCircle
+
         #if coordinates greater than 0, set them as center circle coordinates for image file
         if(self.cx>0):
-            self.ImageCircle[1] = self.cx
+            self.circleImage[1] = self.cx
         if(self.cy>0):
-            self.ImageCircle[2] = self.cy
+            self.circleImage[2] = self.cy
         if(self.cr>0):
-            self.ImageCircle[3] = self.cr
+            self.circleImage[3] = self.cr
         
         #logger debugging statement
         logger.debug(f"Assuring center fisheye coordinates are above 0")
         #plotting to check
-        plt.imshow(self.ImageCircle[0])
+        plt.imshow(self.circleImage[0],cmap=plt.cm.gray)
         #return new format of image
-        return self.ImageCircle
+        return self.circleImage
