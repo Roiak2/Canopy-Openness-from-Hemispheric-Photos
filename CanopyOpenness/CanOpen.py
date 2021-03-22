@@ -4,7 +4,7 @@ Calculating canopy openness from hemispheric photos
 """
 
 #**What this will eventually do**  
-#walk through the different functions in the CanOpeness package and help the user:
+#walk through the different functions in the CanopyOpeness package and help the user:
 #  - 1) Upload image files from the TestPhotos folder that comes with the package  
 #  - 2) Normalize the exposure across multiple photos to get consistent estimates  
 #  - 3) Choose the blue channel from RGB data in the photo to display as black and white  
@@ -17,146 +17,203 @@ Calculating canopy openness from hemispheric photos
 #Importing packages
 import glob #helping identify files in pathfiles
 import os #finding pathfiles
-
-import skimage #image manipulation
-from skimage import io
-from skimage.feature import canny
-from skimage.draw import circle_perimeter
-from skimage.util import img_as_ubyte
-from skimage.filters import threshold_otsu #threshold algorithm
-from skimage.color import rgb2gray
+from loguru import logger #Logger for debugging messages
 import pathlib #getting pathfiles
 import pandas #dataframe manipulation and outputting
 import numpy as np #statistical calculations
 import natsort #batch loading of files
 import matplotlib.pyplot as plt #plots
-from loguru import logger
+
+import skimage #image manipulation
+from skimage import io #filepaths in skimage
+from skimage.feature import canny #making shapes in images
+from skimage.draw import circle_perimeter #drawing circles
+from skimage.util import img_as_ubyte #saving images
+from skimage.filters import threshold_otsu #threshold algorithm
+from skimage.color import rgb2gray #grayscale
+
 
 #-------------------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------------------
 
-#Class to load and prepare images (still have to flesh out the class bit of it)
-# class ImagePrep():
-#     """
-#     Class object to load image files and convert them to black and white to differentiate sky from canopy objects
-#     """
-#     #some kind of function to intialize, still not sure how or what to do here
-#     def __init__(self)
-
-#function to load image and plot it    
-def imageLoad(filepath, filename):
+#Class to load and prepare images
+class ImagePrep():
     """
-    This function takes a filepath and filename of an image and loads that image and returns it and plots it
+    Class object to load image files and convert them to black and white to 
+    differentiate sky from canopy objects
+    """
+    #function to intialize the class object
+    def __init__(self, filepath, filename):
+        """
+        Initialize function by saving inputs and outputs in object
+        """
+        # store inputs and outputs in __init__
+        # created empty strings for a number of self.___ definitions as a temporary placeholder
+        # but would suggest finding a better/morespecific placeholder depending on data type of each object
+
+        # inputs
+        self.filepath = filepath
+        self.filename = filename
+        
+        # store outputs from imageLoad
+        self.photo_location = ""
+        self.photo = ""   
+        
+        # input for BluePic (uses self.photo from imageLoad)
+        # output for BluePic
+        self.image = ""
+        
+        # input for bwPic (uses self.image from BluePic)
+        # output for bwPic
+        self.gray_image = ""
+        self.th = ""
+        self.binary = ""
     
-    PARAMETERS
-    filepath - where image is stored (a directory)
-    filename - name of image (with jpg, png ending)
-    """
-    #uploading photo based on given path and image name
-    photo_location = os.path.join(filepath, filename) 
-    #reading image file using io.imread from skimage
-    photo = io.imread(photo_location) 
-    #plot photo
-    plt.imshow(photo)
-    logger.debug(f"loaded image: {filename}")
-    #return photo
-    return photo
+    #function to load image and plot it    
+    def imageLoad(self):
+        """
+        This function takes a filepath and filename of an image and loads 
+        that image and returns it and plots it
+        PARAMETERS
+        filepath - where image is stored (a directory)
+        filename - name of image (with jpg, png ending)
+        """
+        #uploading photo based on given path and image name
+        self.photo_location = os.path.join(self.filepath, self.filename) 
+        #reading image file using io.imread from skimage
+        self.photo = io.imread(self.photo_location) 
+        #plot photo
+        plt.imshow(self.photo)
+        #Debugging logger message
+        logger.debug(f"loaded image: {self.filename}")
+        #return photo
+        #return self.photo
 
-#function to convert image to blue channel
-def BluePic(image = ""):
-    """
-    This function converts a loaded image into just the blue from RGB channel.
-    Outputs image file with just blue channel and plots it
+    #function to convert image to blue channel
+    def BluePic(self):
+        """
+        This function converts a loaded image into just the blue from RGB channel.
+        Outputs image file with just blue channel and plots it
     
-    PARAMETERS
-    input - image file
-    """
-    #setting only blue channel by setting R and G (0 and 1 indexed in numpy array of image file) to 0 
-    image[:,:,0] = 0
-    image[:,:,1] = 0
-    #plot photo
-    plt.imshow(image)
-    logger.debug(f"converted image to blue...")
-    #return photo
-    return image
+        PARAMETERS
+        input - image file
+        """
+        #setting only blue channel by setting R and G (0 and 1 indexed in numpy array of image file) to 0 
+        
+        self.image = self.photo #setting image
+        
+        self.image[:,:,0] = 0 #changing channels (R)
+        self.image[:,:,1] = 0 #changing channels (G)
+        #plot photo
+        plt.imshow(self.image) 
+        #debugging logger message
+        logger.debug(f"converted image to blue...") 
+        #return photo
+        #return self.image
 
 
-#function to turn blue image into thresholded black and white image
-def bwPic(image = ""):
-    """
-    This function takes an image file as input, converts to greyscale, uses an algorithm to threshold,
-    and then converts the photo into binary black and white based on that threshold.
-    Outputs a new binary image and plots it
+    #function to turn blue image into thresholded black and white image
+    def bwPic(self):
+        """
+        This function takes an image file as input, converts to greyscale, uses an algorithm 
+        to threshold, and then converts the photo into binary black and white based on that threshold.
+        Outputs a new binary image and plots it
     
-    PARAMETERS
-    Inputted image file
-    """
-    #converting photo to grayscale
-    gray_image = rgb2gray(image)
-    #set threshold based on otsu algorithm (if above threshold, array set to 1, otherwise 0 creating black-and-white)
-    th = threshold_otsu(gray_image)
-    #Create new image 
-    binary = gray_image > th
-    #plots image
-    plt.imshow(binary,cmap=plt.cm.gray)
-    logger.debug(f"converted image to BW ...threshold...")
-    #returns it
-    return binary
+        PARAMETERS
+        Inputted image file
+        """
+        #converting photo to grayscale
+        self.gray_image = rgb2gray(self.image)
+        #set threshold based on otsu algorithm (if above threshold, array set to 1, otherwise 0 creating black-and-white)
+        self.th = threshold_otsu(self.gray_image)
+        #create new image 
+        self.binary = self.gray_image > self.th
+        #plots image
+        plt.imshow(self.binary,cmap=plt.cm.gray)
+        #debugging logger message
+        logger.debug(f"converted image to BW ...threshold...")
+        #returns it
+        #return self.binary
 
 #-------------------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------------------
 
-#Now adding class object to get the boundaries of the fisheye lens for openness calculations
+#adding class object to get the boundaries of the fisheye lens for openness calculations
+class FishEye():
+    """
+    Class object to get center coordinates, radius of fisheye lens and output new image array with that information
+    """
+    #function to intialize the class object
+    def __init__(self,fisheye):
+        """
+        Initialize function by saving inputs and outputs in object
+        """
+        #store inputs and outputs in __init__
 
-# class FishEye():
-#     """
-#     Class object to get center coordinates, radius of fisheye lens and output new image array with that information
-#     """
+        #input (image file from ImageLoad class object)
+        self.fisheye = fisheye
+        
+        #center coordinates of the fisheye lens to exclude border
+        self.cx = "" 
+        self.cy = ""
+        self.cr = ""
+        
+        #output of new image with center coordinates added
+        self.ImageCircle = ""
 
-#Adding center coordinates of image and radius of center
-def CircleCoords(image = ""):
-    """
-    Function that takes an image as input and returns image file with circle of fisheye lens as boundary
-    Based on calculating of center coordinates given the shape of the numpy array (file format of image)
-    
-    PARAMETERS
-    image = input loaded image
-    
-    OUTPUT
-    returns image array with coordinates for center circle of fisheye photo
-    """
-    #x coordinate of center
-    fish_cx = image.shape[1]/2
-    #y coordinate of center
-    fish_cy = image.shape[0]/2
-    #radius of the hemispheric photo center
-    fish_cr = (image.shape[0]/2)-2
-    #put all those in a list with new coordinates
-    ImageCircle = [image,fish_cx,fish_cy,fish_cr]
-    #return new format of image
-    return ImageCircle
+    #function for adding center coordinates of image and radius of center
+    def CircleCoords(self):
+        """
+        Function that takes an image as input and returns image file with circle of fisheye lens as boundary
+        Based on calculating of center coordinates given the shape of the numpy array (file format of image)
+        
+        PARAMETERS
+        image = input loaded image
+        
+        OUTPUT
+        returns image array with coordinates for center circle of fisheye photo
+        """
+        #x coordinate of center
+        self.cx = self.fisheye.shape[1]/2
+        #y coordinate of center
+        self.cy = self.fisheye.shape[0]/2
+        #radius of the hemispheric photo center
+        self.cr = (self.fisheye.shape[0]/2)-2
+        #put all those in a list with new coordinates
+        self.ImageCircle = [self.fisheye,self.cx,self.cy,self.cr]
 
-#Setting circle based on the calculated center circle radius (not sure if we need this, it's mostly for plotting)
-def SetCircle(image = "", cx=0,cy=0,cr=0):
-    """
-    Function that sets image coordinates based on previous calculations of center circle of hemispheric image
-    
-    PARAMETERS
-    image = image after it's gone through Image2Circle function
-    cx = center x coordinate
-    cy = center y coordinate
-    cr = radius of center circle of fisheye lens
-    """
-    #if coordinates greater than 0, set them as center circle coordinates for image file
-    if(cx>0):
-        image[1] = cx
-    if(cy>0):
-        image[2] = cy
-    if(cr>0):
-        image[3] = cr
-    
-    #output image array
-    return(image)
+        #logger debugging statement
+        logger.debug(f"Set center circle...fisheye...coordinates")
+        #plotting to check
+        plt.imshow(self.ImageCircle[0])
+        #return new format of image
+        return self.ImageCircle
+
+    #function for setting circle based on the calculated center circle radius
+    def SetCircle(self):
+        """
+        Function that sets image coordinates based on previous calculations of center circle of hemispheric image
+        
+        PARAMETERS
+        self.image = image after it's gone through CircleCoords function
+        self.cx = center x coordinate
+        self.cy = center y coordinate
+        self.cr = radius of center circle of fisheye lens
+        """
+        #if coordinates greater than 0, set them as center circle coordinates for image file
+        if(self.cx>0):
+            self.ImageCircle[1] = self.cx
+        if(self.cy>0):
+            self.ImageCircle[2] = self.cy
+        if(self.cr>0):
+            self.ImageCircle[3] = self.cr
+        
+        #logger debugging statement
+        logger.debug(f"Assuring center fisheye coordinates are above 0")
+        #plotting to check
+        plt.imshow(self.ImageCircle[0])
+        #return new format of image
+        return self.ImageCircle
    
 # #Draw circle on photo to visualize (still not working)
 # def DrawCircle(image="",cx=100, cy=100, cr=50):
