@@ -11,6 +11,7 @@ from skimage.feature import canny
 from skimage.draw import circle_perimeter
 from skimage.util import img_as_ubyte
 from skimage.filters import threshold_otsu #threshold algorithm
+from skimage.color import rgb2gray # import rgb2gray
 import pathlib #getting pathfiles
 import pandas #dataframe manipulation and outputting
 import numpy as np #statistical calculations
@@ -18,9 +19,7 @@ import glob #helping identify files in pathfiles
 import os #finding pathfiles
 import natsort #batch loading of files
 import matplotlib.pyplot as plt #plots
-
-# add rgb2gray 
-from skimage.color import rgb2gray # import rgb2gray
+from loguru import logger 
 
 #-------------------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------------------
@@ -74,8 +73,10 @@ class ImagePrep():
         self.photo = io.imread(self.photo_location) 
         #plot photo
         plt.imshow(self.photo)
+        #Debugging logger message
+        logger.debug(f"loaded image: {self.filename}")
         #return photo
-        return self.photo
+        #return self.photo
 
     #function to convert image to blue channel
     def BluePic(self):
@@ -88,14 +89,16 @@ class ImagePrep():
         """
         #setting only blue channel by setting R and G (0 and 1 indexed in numpy array of image file) to 0 
         
-        self.image = self.photo
+        self.image = self.photo #setting image
         
-        self.image[:,:,0] = 0
-        self.image[:,:,1] = 0
+        self.image[:,:,0] = 0 #changing channels
+        self.image[:,:,1] = 0 
         #plot photo
-        plt.imshow(self.image)  
+        plt.imshow(self.image) 
+        #debugging logger message
+        logger.debug(f"converted image to blue...") 
         #return photo
-        return self.image
+        #return self.image
 
 
     #function to turn blue image into thresholded black and white image
@@ -112,9 +115,11 @@ class ImagePrep():
         self.gray_image = rgb2gray(self.image)
         #set threshold based on otsu algorithm (if above threshold, array set to 1, otherwise 0 creating black-and-white)
         self.th = threshold_otsu(self.gray_image)
-        #Create new image 
+        #create new image 
         self.binary = self.gray_image > self.th
         #plots image
         plt.imshow(self.binary,cmap=plt.cm.gray)
+        #debugging logger message
+        logger.debug(f"converted image to BW ...threshold...")
         #returns it
-        return self.binary
+        #return self.binary
