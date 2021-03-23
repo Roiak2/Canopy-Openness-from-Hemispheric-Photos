@@ -19,30 +19,38 @@ Currently there is a demo Jupyter Notebook found in the package for a user to tr
 │   ├── CanOpenness Demo Script.ipynb     
 │   ├── FishEye.py
 │   ├── ImageLoad.py
-│   ├── __init__.py
-│   └── __pycache__
-│       ├── CanOpen.cpython-38.pyc        
-│       ├── FishEye.cpython-38.pyc        
-│       ├── ImageLoad.cpython-38.pyc      
-│       └── __init__.cpython-38.pyc       
-├── README.md
-├── Sample Photos
-├── WorkingExample.ipynb
+│   └── __init__.py     
 ├── examples
 │   ├── Sample_Photo.JPG
 │   ├── Sample_Photo_Threshold.jpg        
 │   └── Test Photos
+├── README.md
+├── WorkingExample.ipynb
 ├── paired-programming-demo.ipynb
 ├── paired-programming.md
 ├── proposal.md
 └── setup.py
 ```
+The *CanopyOpenness* folder contains the modules for the package and the init file.
+   - So far `FishEye.py` and `ImageLoad.py` are up and running. 
+   - `CanOpen.py` is a script to test out class objects, and `CanOpenness Demo Script.ipynb` is a jupyter notebook that outputs tests of that script.
+
+The *examples* folder contains sample photos used to test code and will eventually contain photos for users to test out the package.
+
+The root branch of the repo has:
+   - a README file with instructions for installations and brief description of the package
+   - a written proposal for the project: `proposal.md` with more details  
+   - a jupyter notebook `WorkingExample.ipynb` with a basic workflow for users to see how the package works  
+   - a `setup.py` file that allows installation of the in-development package in a user's machine
+   - two `paired-programming` files with comments from peers and code suggestions (thank you Scarlet Au and Catherine Lan!)
+ 
 
 Dependencies and libraries for this package include:
   1. `pandas`: to output and store results in a dataframe  
   2. `numpy`: to carry out statistical calculations 
-  3. `skimage`: to threshold colors in inputted images  
-  4. `pathlib`: to handle multiple files at once from a directory
+  3. `skimage`: to manipulate photos and threshold colors in inputted images  
+  4. `pathlib` & `natsort`: to handle multiple files at once from a directory
+  5. `matplotlib`: to display results and images
 
 ### User Input and Interface
 The program requires the user to input image files. These will be jpeg or png files and should be fisheye photos.
@@ -57,18 +65,15 @@ An example below:
 
 ```
 #import program
-import CanOpen
+import CanopyOpenness
 
 #load single image
-image = CanOpen.load_image("./images/[image name].jpg)
+image = CanopyOpenness.ImageLoad.ImagePrep("./images/[image name].jpg)
 
 #alternatively, can load batch images from single directory
-batch_images = CanOpen.list_files("images/",pattern = ".JPEG")
-
-#then program will load images in a for loop as for a single image
+batch_images = CanopyOpenness.ImageBatchLoad.ImagePrep("images/",pattern = ".JPEG")
 
 ```
-
 Therefore this program uses a Python API so users can interactively tweak and view results to fit their preferred use.
 
 ### Description of Data:
@@ -82,10 +87,10 @@ Therefore this program uses a Python API so users can interactively tweak and vi
 
 A csv output example:
 
-| Photo | lon  | Month | Canopy_Openness |
-|-------|------|-------|-----------------|
-| 1A    | 73.4 | May   | 64.5            |
-| 1B    | 73.45| May   | 34.7            |
+| Photo | Plot | lon  | Month | Canopy_Openness |
+|-------|------|------|-------|-----------------|
+| 1A    | LFDP |73.4  | May   | 64.5            |
+| 1B    | LFDP |73.45 | May   | 34.7            |
 
 A photo example showing black and white for canopy vs. sky:
 
