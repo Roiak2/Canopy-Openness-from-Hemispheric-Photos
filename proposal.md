@@ -14,19 +14,26 @@ Currently there is a demo Jupyter Notebook found in the package for a user to tr
 
 ```bash
 .
-├── CanOpenness
+├── CanopyOpenness
 │   ├── CanOpen.py
-│   ├── CanOpenness Demo Script.ipynb
-│   └── __init__.py
+│   ├── CanOpenness Demo Script.ipynb     
+│   ├── FishEye.py
+│   ├── ImageLoad.py
+│   ├── __init__.py
+│   └── __pycache__
+│       ├── CanOpen.cpython-38.pyc        
+│       ├── FishEye.cpython-38.pyc        
+│       ├── ImageLoad.cpython-38.pyc      
+│       └── __init__.cpython-38.pyc       
 ├── README.md
 ├── Sample Photos
+├── WorkingExample.ipynb
+├── examples
 │   ├── Sample_Photo.JPG
-│   ├── Sample_Photo_Threshold.jpg
+│   ├── Sample_Photo_Threshold.jpg        
 │   └── Test Photos
-│       ├── LFDP.394.12Dec2017.EV-2.AF.JPG
-│       ├── LFDP.400.11Dec2017.EV0.M.JPG
-│       ├── LFDP.403.11Dec2017.EV0.AF.JPG
-│       └── LFDP.406.11Dec2017.EV0.AF.JPG
+├── paired-programming-demo.ipynb
+├── paired-programming.md
 ├── proposal.md
 └── setup.py
 ```
@@ -42,7 +49,7 @@ The program requires the user to input image files. These will be jpeg or png fi
 
 For example:
 
-<img src="Sample Photos/Sample_Photo.JPG" height="200">
+<img src="examples/Sample_Photo.JPG" height="200">
 
 The photo is then loaded and saved to be manipulated. This can be easily achieved once the program is loaded into a notebook/script/command line. 
 
@@ -82,7 +89,7 @@ A csv output example:
 
 A photo example showing black and white for canopy vs. sky:
 
-<img src="Sample Photos/Sample_Photo_Threshold.jpg" height="200">
+<img src="examples/Sample_Photo_Threshold.jpg" height="200">
 
 **Output locations -**
 The user will be able to save the resultant csv and plots into a directory of their choosing, whether in a remote server or on their own machine by choosing a filepath.
