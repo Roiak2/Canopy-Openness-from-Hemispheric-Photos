@@ -47,9 +47,9 @@ class FishEye():
         self.fisheye = fisheye
         
         #center coordinates of the fisheye lens to exclude border
-        self.cx = "" 
-        self.cy = ""
-        self.cr = ""
+        self.cx = int() 
+        self.cy = int()
+        self.cr = int()
         
         #output of new image with center coordinates added
         self.ImageCircle = ""
@@ -105,6 +105,8 @@ class FishEye():
         if(self.cr>0):
             self.circleImage[3] = self.cr
         
+
+
         #logger debugging statement
         logger.debug(f"Assuring center fisheye coordinates are above 0")
         #plotting to check

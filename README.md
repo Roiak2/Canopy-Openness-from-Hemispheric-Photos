@@ -10,7 +10,7 @@ This program can be installed this way:
 
 ```
 #install dependency pacakages
-conda install pandas, toyplot, numpy, scikit-image -c conda-forge 
+conda install natsort pandas matplotlib numpy scikit-image -c conda-forge 
 
 #clone repository of package
 git clone [https://github.com/Roiak2/Canopy-Openness-from-Hemispheric-Photos]
