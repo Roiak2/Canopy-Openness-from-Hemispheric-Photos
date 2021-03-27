@@ -37,7 +37,7 @@ class FishEye():
     Class object to get center coordinates, radius of fisheye lens and output new image array with that information
     """
     #function to intialize the class object
-    def __init__(self,fisheye):
+    def __init__(self,fisheye,cx=0,cy=0,cr=0):
         """
         Initialize function by saving inputs and outputs in object
         """
@@ -47,9 +47,9 @@ class FishEye():
         self.fisheye = fisheye
         
         #center coordinates of the fisheye lens to exclude border
-        self.cx = "" 
-        self.cy = ""
-        self.cr = ""
+        self.cx = cx
+        self.cy = cy
+        self.cr = cr
         
         #output of new image with center coordinates added
         self.ImageCircle = ""
@@ -79,9 +79,9 @@ class FishEye():
         #logger debugging statement
         logger.debug(f"Set center circle...fisheye...coordinates")
         #plotting to check
-        plt.imshow(self.ImageCircle[0],cmap=plt.cm.gray)
+        #plt.imshow(self.ImageCircle[0],cmap=plt.cm.gray)
         #return new format of image
-        #return self.ImageCircle
+        return self.ImageCircle
 
     #function for setting circle based on the calculated center circle radius
     def SetCircle(self):
