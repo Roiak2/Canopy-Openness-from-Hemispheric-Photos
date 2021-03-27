@@ -27,6 +27,10 @@ from skimage.draw import circle_perimeter #drawing circles
 from skimage.util import img_as_ubyte #saving images
 from skimage.filters import threshold_otsu #threshold algorithm
 from skimage.color import rgb2gray #grayscale
+from skimage.draw import line, set_color #setting colors
+import matplotlib.cbook #getting matplot lib cookbook
+import warnings #warnings package
+warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation) #suppress specific annoying warning
 
 #-------------------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------------------
@@ -47,10 +51,17 @@ class FishEye():
         self.fisheye = fisheye
         
         #center coordinates of the fisheye lens to exclude border
+        self.shape = ""
         self.cx = cx
         self.cy = cy
         self.cr = cr
+        self.rr = ""
+        self.cc = ""
         
+        #plotting variables
+        self.circle = ""
+        self.fig = ""
+
         #output of new image with center coordinates added
         self.ImageCircle = ""
         self.circleImage = ""
@@ -67,23 +78,43 @@ class FishEye():
         OUTPUT
         returns image array with coordinates for center circle of fisheye photo
         """
+        #SET COORDINATES AND RADIUS
+        self.shape = self.fisheye.shape #setting shape
         #x coordinate of center
-        self.cx = self.fisheye.shape[1]/2
+        self.cx = int(self.shape[1]/2)
         #y coordinate of center
-        self.cy = self.fisheye.shape[0]/2
+        self.cy = int(self.shape[0]/2)
         #radius of the hemispheric photo center
-        self.cr = (self.fisheye.shape[0]/2)-2
+        self.cr = int((self.shape[0]/2)-150)
+
+        #Print message displaying coordinates and radius to user
+        print('center circle coordinates = (',self.cx,',',self.cy,')', 'radius = ',self.cr) 
+
+        #ADD TO NUMPY ARRAY
+        #draw circle perimeter based on above coordinates and radius
+        self.rr, self.cc = circle_perimeter(self.cy,self.cx, radius=self.cr, shape=self.shape)
+        #Assigning to numpy array
+        self.ImageCircle = self.fisheye[self.rr,self.cc] = 1
         #put all those in a list with new coordinates
-        self.ImageCircle = [self.fisheye,self.cx,self.cy,self.cr]
+        #self.ImageCircle = [self.fisheye,self.cx,self.cy,self.cr]
 
         #logger debugging statement
         logger.debug(f"Set center circle...fisheye...coordinates")
-        #plotting to check
-        #plt.imshow(self.ImageCircle[0],cmap=plt.cm.gray)
-        #return new format of image
-        return self.ImageCircle
 
-    #function for setting circle based on the calculated center circle radius
+        #plotting to check
+        #Create circle for plotting based on coordinates, color red
+        self.circle = plt.Circle((self.cx, self.cy), self.cr, color=(1, 0, 0),fill=False)
+        # Open new figure
+        self.fig = plt.figure()
+        # In figure, Image as background
+        plt.imshow(self.fisheye,cmap=plt.cm.gray)
+        # Add the circles to figure as subplots
+        self.fig.add_subplot().add_artist(self.circle)
+
+        #return new format of image
+        #return self.ImageCircle
+
+    #function for setting circle manually, otherwise leaving as is
     def SetCircle(self):
         """
         Function that sets image coordinates based on previous calculations of center circle of hemispheric image
@@ -108,6 +139,6 @@ class FishEye():
         #logger debugging statement
         logger.debug(f"Assuring center fisheye coordinates are above 0")
         #plotting to check
-        plt.imshow(self.circleImage[0],cmap=plt.cm.gray)
+        #plt.imshow(self.circleImage[0],cmap=plt.cm.gray)
         #return new format of image
         return self.circleImage
