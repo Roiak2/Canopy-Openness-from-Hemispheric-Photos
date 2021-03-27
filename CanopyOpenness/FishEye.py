@@ -96,23 +96,23 @@ class FishEye():
         #Assigning to numpy array
         self.ImageCircle = self.fisheye[self.rr,self.cc] = 1
         #put all those in a list with new coordinates
-        #self.ImageCircle = [self.fisheye,self.cx,self.cy,self.cr]
+        self.ImageCircle = [self.fisheye,self.cx,self.cy,self.cr]
 
         #logger debugging statement
         logger.debug(f"Set center circle...fisheye...coordinates")
 
         #plotting to check
         #Create circle for plotting based on coordinates, color red
-        self.circle = plt.Circle((self.cx, self.cy), self.cr, color=(1, 0, 0),fill=False)
+        #self.circle = plt.Circle((self.cx, self.cy), self.cr, color=(1, 0, 0),fill=False)
         # Open new figure
-        self.fig = plt.figure()
+        #self.fig = plt.figure()
         # In figure, Image as background
-        plt.imshow(self.fisheye,cmap=plt.cm.gray)
+        plt.imshow(self.ImageCircle,cmap=plt.cm.gray)
         # Add the circles to figure as subplots
-        self.fig.add_subplot().add_artist(self.circle)
+        #self.fig.add_subplot().add_artist(self.circle)
 
         #return new format of image
-        #return self.ImageCircle
+        return self.ImageCircle
 
     #function for setting circle manually, otherwise leaving as is
     def SetCircle(self):
