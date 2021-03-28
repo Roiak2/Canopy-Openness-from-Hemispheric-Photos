@@ -35,7 +35,7 @@ warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation) #sup
 #-------------------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------------------
 
-#adding class object to get the boundaries of the fisheye lens for openness calculations
+#class object to get the boundaries of the fisheye lens for openness calculations
 class FishEye():
     """
     Class object to get center coordinates, radius of fisheye lens and output new image array with that information
@@ -45,26 +45,21 @@ class FishEye():
         """
         Initialize function by saving inputs and outputs in object
         """
-        #store inputs and outputs in __init__
-
         #input (image file from ImageLoad class object)
-        self.fisheye = fisheye
-        
-        #center coordinates of the fisheye lens to exclude border
-        self.shape = ""
-        self.cx = cx
-        self.cy = cy
-        self.cr = cr
-        self.rr = ""
-        self.cc = ""
-        
-        #plotting variables
-        self.circle = ""
-        self.fig = ""
+        self.fisheye = fisheye #image
+        self.shape = self.fisheye.shape #setting shape of image
 
+        #center coordinates of the fisheye lens to exclude border
+        self.cx = cx #center x
+        self.cy = cy #center y
+        self.cr = cr #center radius
+        self.rr = "" #radius for circle_perimeter function in skimage
+        self.cc = "" #center coordinates for circle_perimeter function in skimage
+        
         #output of new image with center coordinates added
-        self.ImageCircle = ""
-        self.circleImage = ""
+        self.ImageCircle = "" #correct image
+        self.ImageCircle2 = "" #numpy array assigned with circle_perimeter (not sure this workd)
+        self.circleImage = "" #output of manually set center coordinates and radius in SetCircle function
 
     #function for adding center coordinates of image and radius of center
     def CircleCoords(self):
@@ -73,13 +68,19 @@ class FishEye():
         Based on calculating of center coordinates given the shape of the numpy array (file format of image)
         
         PARAMETERS
-        image = input loaded image
+        self.fisheye = input loaded image
+        self.shape = shape of input image
+        self.cx = center x coordinate
+        self.cy = center y coordinate
+        self.cr = radius of center circle of fisheye lens
+        self.rr and self.cc = inputs for circle_perimeter function in skimage
         
         OUTPUT
-        returns image array with coordinates for center circle of fisheye photo
+        self.ImageCircle = image array with coordinates for center circle of fisheye photo
+        plots image with circle drawn in red
+        self.ImageCircle2 = how circle_perimeter function says to index into numpy array (not sure it works though)
         """
         #SET COORDINATES AND RADIUS
-        self.shape = self.fisheye.shape #setting shape
         #x coordinate of center
         self.cx = int(self.shape[1]/2)
         #y coordinate of center
@@ -92,53 +93,80 @@ class FishEye():
 
         #ADD TO NUMPY ARRAY
         #draw circle perimeter based on above coordinates and radius
-        self.rr, self.cc = circle_perimeter(self.cy,self.cx, radius=self.cr, shape=self.shape)
-        #Assigning to numpy array
-        self.ImageCircle = self.fisheye[self.rr,self.cc] = 1
+        self.rr, self.cc = circle_perimeter(self.cy,self.cx, radius=self.cr, shape=self.shape) 
         #put all those in a list with new coordinates
         self.ImageCircle = [self.fisheye,self.cx,self.cy,self.cr]
+        #Assigning to numpy array another way for plotting
+        self.ImageCircle2 = self.fisheye[self.rr,self.cc] = 1 
 
         #logger debugging statement
         logger.debug(f"Set center circle...fisheye...coordinates")
 
-        #plotting to check
+        #plotting for user to see the circle around the fisheye
         #Create circle for plotting based on coordinates, color red
-        #self.circle = plt.Circle((self.cx, self.cy), self.cr, color=(1, 0, 0),fill=False)
+        circle = plt.Circle((self.cx, self.cy), self.cr, color=(1, 0, 0),fill=False)
         # Open new figure
-        #self.fig = plt.figure()
+        fig = plt.figure()
         # In figure, Image as background
-        plt.imshow(self.ImageCircle,cmap=plt.cm.gray)
+        plt.imshow(self.ImageCircle[0], cmap=plt.cm.gray)
         # Add the circles to figure as subplots
-        #self.fig.add_subplot().add_artist(self.circle)
+        fig.add_subplot().add_artist(circle)
 
         #return new format of image
         return self.ImageCircle
+        return self.ImageCircle2
 
     #function for setting circle manually, otherwise leaving as is
-    def SetCircle(self):
+    def SetCircle(self,cx=0,cy=0,cr=0):
         """
-        Function that sets image coordinates based on previous calculations of center circle of hemispheric image
+        Function that manually sets image coordinates based on previous calculations of center circle of hemispheric image
         
         PARAMETERS
-        self.image = image after it's gone through CircleCoords function
+        self.circleImage = image after it's gone through CircleCoords function (self.ImageCircle)
         self.cx = center x coordinate
         self.cy = center y coordinate
         self.cr = radius of center circle of fisheye lens
-        """
-        #intializing photo from ImageCircle
-        self.circleImage = self.ImageCircle
 
-        #if coordinates greater than 0, set them as center circle coordinates for image file
-        if(self.cx>0):
-            self.circleImage[1] = self.cx
-        if(self.cy>0):
-            self.circleImage[2] = self.cy
-        if(self.cr>0):
-            self.circleImage[3] = self.cr
+        OUTPUT
+        self.circleImage, image with center coordinates and radius, also plots to show user
+        """
+        #intializing photo
+        self.circleImage = self.fisheye
+        
+        #center coordinates of the fisheye lens to exclude border
+        self.cx = cx #center x
+        self.cy = cy #center y
+        self.cr = cr #center radius
+
+        #if coordinates are not set manually, set them from CircleCoords function
+        if(self.cx==0):
+            self.cx = self.ImageCircle[1]
+        if(self.cy==0):
+            self.cy = self.ImageCircle[2]
+        if(self.cr==0):
+            self.cr = self.ImageCircle[3]
+
+        #ADD TO NUMPY ARRAY
+        #draw circle perimeter based on above coordinates and radius
+        self.rr, self.cc = circle_perimeter(self.cy,self.cx, radius=self.cr, shape=self.shape) 
+        #put all those in a list with new coordinates
+        self.circleImage = [self.fisheye,self.cx,self.cy,self.cr]
+        #Assigning to numpy array another way for plotting
+        self.circleImage2 = self.fisheye[self.rr,self.cc] = 1 
         
         #logger debugging statement
-        logger.debug(f"Assuring center fisheye coordinates are above 0")
-        #plotting to check
-        #plt.imshow(self.circleImage[0],cmap=plt.cm.gray)
+        logger.debug(f"Manually setting fisheye coordinates")
+        
+        #plotting for user to see the circle around the fisheye
+        #Create circle for plotting based on coordinates, color red
+        circle = plt.Circle((self.cx, self.cy), self.cr, color=(1, 0, 0),fill=False)
+        # Open new figure
+        fig = plt.figure()
+        # In figure, Image as background
+        plt.imshow(self.circleImage[0], cmap=plt.cm.gray)
+        # Add the circles to figure as subplots
+        fig.add_subplot().add_artist(circle)
+
         #return new format of image
         return self.circleImage
+        return self.circleImage2
