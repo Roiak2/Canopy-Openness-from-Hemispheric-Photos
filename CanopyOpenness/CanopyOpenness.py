@@ -15,7 +15,6 @@ Calculating fractions of sunlight (i.e. gap) in hemispheric photos and getting c
 #Importing packages
 import glob #helping identify files in pathfiles
 import os #finding pathfiles
-from loguru import logger #Logger for debugging messages
 import pathlib #getting pathfiles
 import pandas #dataframe manipulation and outputting
 import numpy as np #statistical calculations
@@ -23,6 +22,7 @@ import natsort #batch loading of files
 import skimage #image manipulation
 from skimage import io #filepaths in skimage
 import warnings #warnings package
+from loguru import logger #Logger for debugging messages
 #-------------------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------------------
 
@@ -81,6 +81,9 @@ class CanopyOpenness():
                 ydeg = y[degree] #get iteration of y array
                 xdeg = x[degree] #get iteration of x array
                 self.gap_fractions[step] +=  self.fisheye[0][int(np.round(ydeg,3)), int(np.round(xdeg,3))] #calculate proportion sky from image array and insert into gap fraction empty matrix
+
+        #logger debugging statement
+        logger.debug(f"Calculating gap fraction profile for sub-circles")
 
         #return gap fraction normalized by 360 degrees
         return self.gap_fractions / 360
