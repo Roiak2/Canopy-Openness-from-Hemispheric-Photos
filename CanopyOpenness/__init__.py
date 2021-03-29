@@ -9,7 +9,7 @@ import sys
 from loguru import logger
 from CanopyOpenness import CanOpen
 from CanopyOpenness import ImageLoad
-from CanopyOpeness import FishEye
+from CanopyOpenness import FishEye
 from CanopyOpenness import CanopyOpenness
 
 
