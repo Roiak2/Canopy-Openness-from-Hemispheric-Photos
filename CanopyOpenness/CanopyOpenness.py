@@ -64,6 +64,7 @@ class CanopyOpenness():
         self.fisheye = Black and white photo with information on fisheye circle coordinates and radius from FishEye.py
 
         """
+
         # convert image array from boolean (False, True) to integer (0,1)
         self.fisheye[0] = self.fisheye[0].astype(int)
 
@@ -82,8 +83,8 @@ class CanopyOpenness():
                 xdeg = x[degree] #get iteration of x array
                 self.gap_fractions[step] +=  self.fisheye[0][int(np.round(ydeg,3)), int(np.round(xdeg,3))] #calculate proportion sky from image array and insert into gap fraction empty matrix
 
-        #logger debugging statement
+        # logger debugging statement
         logger.debug(f"Calculating gap fraction profile for sub-circles")
 
-        #return gap fraction normalized by 360 degrees
+        # return gap fraction normalized by 360 degrees
         return self.gap_fractions / 360
