@@ -11,7 +11,8 @@ from skimage import io #loading and plotting image
 from skimage.feature import canny #defining features within picture
 from skimage.draw import circle_perimeter #circling function to create circle
 from skimage.util import img_as_ubyte #image definitions
-from skimage.filters import threshold_otsu #threshold algorithm
+from skimage.filters import threshold_otsu #threshold otsu algorithm
+from skimage.filters import threshold_isodata #threshold isodata algorithm
 from skimage.color import rgb2gray # import rgb2gray
 import pathlib #getting pathfiles
 import pandas #dataframe manipulation and outputting
