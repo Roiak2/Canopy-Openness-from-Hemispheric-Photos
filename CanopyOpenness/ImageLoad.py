@@ -30,7 +30,7 @@ class ImagePrep():
     Class object to load image files and convert them to black and white to 
     differentiate sky from canopy objects
     """
-    def __init__(self, filepath, filename,threshold=0,threshold_method):
+    def __init__(self, filepath, filename,threshold=0,threshold_method="otsu"):
         """
         Initialize function by saving inputs and outputs in object
         """
@@ -43,7 +43,7 @@ class ImagePrep():
         self.filepath = filepath
         self.filename = filename
         self.th = threshold #manually set threshold, default is none
-        self.threshold_method = "otsu" #threshold algorithm otsu default or isodata
+        self.threshold_method = threshold_method #threshold algorithm, defaults to otsu or can be isodata
         
         # store outputs from imageLoad
         self.photo_location = ""
