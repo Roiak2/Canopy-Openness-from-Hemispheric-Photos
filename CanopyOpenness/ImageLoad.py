@@ -14,7 +14,6 @@ Takes in file name and path, as well as thresholding method, and loads an image 
 
 #-------------------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------------------
-
 #Importing packages
 import glob #helping identify files in pathfiles
 import skimage #image manipulation
@@ -31,8 +30,7 @@ import numpy as np #statistical calculations
 import os #finding pathfiles
 import natsort #batch loading of files
 import matplotlib.pyplot as plt #plots
-from loguru import logger #logger 
-    
+from loguru import logger #logger   
 #-------------------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------------------
 
