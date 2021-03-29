@@ -30,7 +30,7 @@ class ImagePrep():
     Class object to load image files and convert them to black and white to 
     differentiate sky from canopy objects
     """
-    def __init__(self, filepath, filename):
+    def __init__(self, filepath, filename,threshold=0,threshold_method):
         """
         Initialize function by saving inputs and outputs in object
         """
@@ -42,6 +42,8 @@ class ImagePrep():
         # inputs
         self.filepath = filepath
         self.filename = filename
+        self.th = threshold #manually set threshold, default is none
+        self.threshold_method = "otsu" #threshold algorithm otsu default or isodata
         
         # store outputs from imageLoad
         self.photo_location = ""
@@ -104,7 +106,7 @@ class ImagePrep():
     #function to turn blue image into thresholded black and white image
     def bwPic(self):
         """
-        This function takes an image file as input, converts to greyscale, uses an algorithm 
+        This function takes an image file as input, converts to greyscale, uses an algorithm (or manual input)
         to threshold, and then converts the photo into binary black and white based on that threshold.
         Outputs a new binary image and plots it
     
@@ -113,8 +115,16 @@ class ImagePrep():
         """
         #converting photo to grayscale
         self.gray_image = rgb2gray(self.image)
-        #set threshold based on otsu algorithm (if above threshold, array set to 1, otherwise 0 creating black-and-white)
-        self.th = threshold_otsu(self.gray_image)
+        #set threshold (if above threshold, array set to 1, otherwise 0 creating black-and-white),
+        #   either manually with user input, or based on algorithms: otsu or isodata
+
+        if self.th == 0 and self.threshold_method == "otsu": #if method is otsu, use that (default)
+            self.th = threshold_otsu(self.gray_image)
+        if self.th == 0 and self.threshold_method == "isodata": #if method is isodata, use that
+            self.th = threshold_isodata(self.gray_image)
+        else: #if manual threshold inserted, override algorithm and use manual threshold
+            self.th = self.th
+        
         #create new image 
         self.binary = self.gray_image > self.th
         #plots image
