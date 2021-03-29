@@ -2,6 +2,7 @@
 """
 Class object ImageLoad() to process/load hemispheric photos 
 provided by user as input.
+Takes in file name and path, as well as thresholding method, and loads an image and converts to black and white
 """
 
 #Importing packages
@@ -25,20 +26,16 @@ from loguru import logger #logger
 #-------------------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------------------
 
-# convert functions into one Class object to load and prepare images
+# A Class object to load and prepare images
 class ImagePrep():
     """
-    Class object to load image files and convert them to black and white to 
-    differentiate sky from canopy objects
+    Class object to load image files and convert them to black and white image based on a threshold
     """
     def __init__(self, filepath, filename,threshold=0,threshold_method="otsu"):
         """
         Initialize function by saving inputs and outputs in object
         """
         # store inputs and outputs in __init__
-        # created empty strings for a number of self.___ definitions as a temporary placeholder
-        # but would suggest finding a better/morespecific placeholder depending on data type of each object
-
 
         # inputs
         self.filepath = filepath
@@ -60,15 +57,18 @@ class ImagePrep():
         self.th = ""
         self.binary = ""
         
-    
     #function to load image and plot it    
     def imageLoad(self):
         """
         This function takes a filepath and filename of an image and loads 
         that image and returns it and plots it
+        
         PARAMETERS
         filepath - where image is stored (a directory)
         filename - name of image (with jpg, png ending)
+
+        OUTPUT
+        Loaded image (numpy array) and plot of it
         """
         #uploading photo based on given path and image name
         self.photo_location = os.path.join(self.filepath, self.filename) 
@@ -88,7 +88,10 @@ class ImagePrep():
         Outputs image file with just blue channel and plots it
     
         PARAMETERS
-        input - image file
+        input - image file from imageLoad
+
+        OUTPUT
+        image after it's been converted to a blue picture
         """
         #setting only blue channel by setting R and G (0 and 1 indexed in numpy array of image file) to 0 
         
@@ -113,6 +116,10 @@ class ImagePrep():
     
         PARAMETERS
         Inputted image file
+        Threshold value - either manually input or using an algorithm (otsu default or isodata)
+
+        OUTPUT
+        Black and white image based on threshold (a numpy 2D array but also plotted)
         """
         #converting photo to grayscale
         self.gray_image = rgb2gray(self.image)
