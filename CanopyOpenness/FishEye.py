@@ -31,7 +31,6 @@ from skimage.draw import line, set_color #setting colors
 import matplotlib.cbook #getting matplot lib cookbook
 import warnings #warnings package
 warnings.filterwarnings("ignore", category=matplotlib.cbook.mplDeprecation) #suppress specific annoying warning
-
 #-------------------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------------------
 
