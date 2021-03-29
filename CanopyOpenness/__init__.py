@@ -2,13 +2,15 @@
 """
 Calculating canopy openness from photos program
 """
-__version__ = "0.0.2"
+__version__ = "0.0.3"
 
 
 import sys
 from loguru import logger
 from CanopyOpenness import CanOpen
 from CanopyOpenness import ImageLoad
+from CanopyOpeness import FishEye
+from CanopyOpenness import CanopyOpenness
 
 
 def set_loglevel(loglevel="INFO"):
