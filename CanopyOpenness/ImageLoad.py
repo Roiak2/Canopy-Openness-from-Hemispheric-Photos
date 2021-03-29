@@ -5,6 +5,16 @@ provided by user as input.
 Takes in file name and path, as well as thresholding method, and loads an image and converts to black and white
 """
 
+#**What this module does**  
+#  - 1) Takes filepath and filename of an image, as well as user inputted thresholding values (manual or algorithm method)
+#  - 2) Loads the image using skimage, and returning numpy array and plot to user
+#  - 3) Converts image to blue channel
+#  - 4) Uses threshold to convert blue image to black-and-white photo with white=sky and black=canopy
+#  - 5) Returns bw photo to user and plots it
+
+#-------------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------------------
+
 #Importing packages
 import glob #helping identify files in pathfiles
 import skimage #image manipulation
