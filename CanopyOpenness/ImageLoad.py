@@ -116,15 +116,18 @@ class ImagePrep():
         """
         #converting photo to grayscale
         self.gray_image = rgb2gray(self.image)
+        
         #set threshold (if above threshold, array set to 1, otherwise 0 creating black-and-white),
         #   either manually with user input, or based on algorithms: otsu or isodata
-
-        if self.threshold == 0 and self.threshold_method == "otsu": #if method is otsu, use that (default)
+        if self.threshold == 0 and self.threshold_method == "otsu": #if method is otsu, use that (default) and print message
             self.threshold = threshold_otsu(self.gray_image)
-        if self.threshold == 0 and self.threshold_method == "isodata": #if method is isodata, use that
+            print("Threshold = ",round(self.threshold,2), "Method = ",self.threshold_method)
+        if self.threshold == 0 and self.threshold_method == "isodata": #if method is isodata, use that and print message
             self.threshold = threshold_isodata(self.gray_image)
-        else: #if manual threshold inserted, override algorithm and use manual threshold
+            print("Threshold = ",round(self.threshold,2), "Method = ",self.threshold_method)
+        else: #if manual threshold inserted, override algorithm and use manual threshold and print message
             self.threshold = self.threshold
+            print("Threshold = ",round(self.threshold,2), "Method = User input")
         
         #create new image 
         self.binary = self.gray_image > self.threshold
@@ -132,12 +135,6 @@ class ImagePrep():
         plt.imshow(self.binary,cmap=plt.cm.gray)
         #debugging logger message
         logger.debug(f"converted image to BW ...threshold...")
-
-        #print message to user displaying threshold and method used
-        if self.threshold != 0:
-            print("Threshold = ",round(self.threshold,2), "Method = User input")
-        else:
-            print("Threshold = ",round(self.threshold,2), "Method = ", self.threshold_method)
         
         #returns it
         return self.binary
