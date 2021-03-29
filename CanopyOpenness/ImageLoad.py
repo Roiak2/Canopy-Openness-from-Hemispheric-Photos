@@ -43,7 +43,7 @@ class ImagePrep():
         # inputs
         self.filepath = filepath
         self.filename = filename
-        self.th = threshold #manually set threshold, default is none
+        self.threshold = int(threshold) #manually set threshold, default is none
         self.threshold_method = threshold_method #threshold algorithm, defaults to otsu or can be isodata
         
         # store outputs from imageLoad
@@ -79,7 +79,7 @@ class ImagePrep():
         #Debugging logger message
         logger.debug(f"loaded image: {self.filename}")
         #return photo
-        #return self.photo
+        return self.photo
 
     #function to convert image to blue channel
     def BluePic(self):
@@ -101,7 +101,7 @@ class ImagePrep():
         #debugging logger message
         logger.debug(f"converted image to blue...") 
         #return photo
-        #return self.image
+        return self.image
 
 
     #function to turn blue image into thresholded black and white image
@@ -119,18 +119,25 @@ class ImagePrep():
         #set threshold (if above threshold, array set to 1, otherwise 0 creating black-and-white),
         #   either manually with user input, or based on algorithms: otsu or isodata
 
-        if self.th == 0 and self.threshold_method == "otsu": #if method is otsu, use that (default)
-            self.th = threshold_otsu(self.gray_image)
-        if self.th == 0 and self.threshold_method == "isodata": #if method is isodata, use that
-            self.th = threshold_isodata(self.gray_image)
+        if self.threshold == 0 and self.threshold_method == "otsu": #if method is otsu, use that (default)
+            self.threshold = threshold_otsu(self.gray_image)
+        if self.threshold == 0 and self.threshold_method == "isodata": #if method is isodata, use that
+            self.threshold = threshold_isodata(self.gray_image)
         else: #if manual threshold inserted, override algorithm and use manual threshold
-            self.th = self.th
+            self.threshold = self.threshold
         
         #create new image 
-        self.binary = self.gray_image > self.th
+        self.binary = self.gray_image > self.threshold
         #plots image
         plt.imshow(self.binary,cmap=plt.cm.gray)
         #debugging logger message
         logger.debug(f"converted image to BW ...threshold...")
+
+        #print message to user displaying threshold and method used
+        if self.threshold != 0:
+            print("Threshold = ",round(self.threshold,2), "Method = User input")
+        else:
+            print("Threshold = ",round(self.threshold,2), "Method = ", self.threshold_method)
+        
         #returns it
         return self.binary
