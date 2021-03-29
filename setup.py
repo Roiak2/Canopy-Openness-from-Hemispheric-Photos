@@ -11,7 +11,7 @@ from setuptools import setup
 #building command
 setup(
     name = "CanopyOpenness",
-    version = "0.0.2",
+    version = "0.0.3",
     author = "Roí A.K.",
     author_email = "ra3040@columbia.edu",
     license = "GPLv3",
