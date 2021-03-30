@@ -32,7 +32,7 @@ class CanopyOpenness():
     Class object to get fractions of sunlight (i.e. gap) in hemispheric photos and getting canopy openness metric for a photo
     """
     #function to intialize the class object
-    def __init__(self,fisheye,cx=0,cy=0,cr=0):
+    def __init__(self,fisheye):
         """
         Initialize function by saving inputs and outputs in object
         """
@@ -40,10 +40,10 @@ class CanopyOpenness():
         self.fisheye = fisheye #image
         self.shape = self.fisheye.shape #setting shape of image
 
-        #center coordinates of the fisheye lens to exclude border (default to 0 but can be manually adjusted)
-        self.cx = cx #center x
-        self.cy = cy #center y
-        self.cr = cr #center radius
+        # get x,y and r of circle
+        self.cx = self.fisheye[1]
+        self.cy = self.fisheye[2]
+        self.cr = self.fisheye[3]
 
         #variables for calculating gap fraction, area, and canopy openness
         self.gfp_radian = np.pi / 180 * np.arange(360) #360 slices around 2*pi for gap fraction calculation
@@ -64,14 +64,9 @@ class CanopyOpenness():
         self.fisheye = Black and white photo with information on fisheye circle coordinates and radius from FishEye.py
 
         """
-
+        
         # convert image array from boolean (False, True) to integer (0,1)
         self.fisheye[0] = self.fisheye[0].astype(int)
-
-        # get x,y and r of circle
-        self.cx = self.fisheye[1]
-        self.cy = self.fisheye[2]
-        self.cr = self.fisheye[3]
 
         # iterate over 89 sub circles within fisheye
         for step in range(89):
