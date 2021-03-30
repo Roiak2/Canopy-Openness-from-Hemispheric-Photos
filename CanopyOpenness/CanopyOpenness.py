@@ -38,7 +38,6 @@ class CanopyOpenness():
         """
         #input (image file from ImageLoad class object)
         self.fisheye = fisheye #image
-        self.shape = self.fisheye.shape #setting shape of image
 
         # get x,y and r of circle
         self.cx = self.fisheye[1]
@@ -58,13 +57,26 @@ class CanopyOpenness():
     def calc_gap_fractions(self):
         """
         This function takes a black-and-white image array from FishEye.py with information on center circle and radius of hemispheric photo,
-        then calculates the proportion of sky within 89 sub-circles within the fisheye 
+        then calculates the proportion of sky within 89 sub-circles within the fisheye.
+        It does this by iterating over the 360 radian slices (gfp_radian), getting coordinates for sub-circle using trigonometry
+            (x coordinate + cosine*radian slices for each circle by dividing the radius by 90)
+            (y coordinate + sin*radian slices for each circle by dividing the radius by 90)
+
+        Since the image array is divided into 0s (sky) and 1s (canopy), the code then goes through each sub-circle coordinates 
+        and counts the amount of 1s there, returning an amount from 0-360 (i.e. for each degree in each sub-circle).
+        Finally, that amount is divided by 360 for each sub-circle to normalize it and return a proportion  
 
         PARAMETERS
         self.fisheye = Black and white photo with information on fisheye circle coordinates and radius from FishEye.py
+        self.cx = center x coordinates
+        self.cy = center y coordinates
+        self.cr = center radius
+        self.gfp_radian = radian conversion for each degree in 360-degree circle
 
+        OUTPUT
+        self.gap_fractions = array of 89 sub-circle with value of proportion sky or gap in each sub-circle
         """
-        
+
         # convert image array from boolean (False, True) to integer (0,1)
         self.fisheye[0] = self.fisheye[0].astype(int)
 
