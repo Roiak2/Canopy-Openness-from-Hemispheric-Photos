@@ -45,15 +45,15 @@ class CanopyOpenness():
         self.cr = self.fisheye[3]
 
         #variables for calculating gap fraction, area, and canopy openness
-        self.gfp_radian = np.pi / 180 * np.arange(360) #360 slices around 2*pi for gap fraction calculation
-        self.open_radian = np.pi / 180 * np.arange(89) #89 slices around 2*pi for openness calculation
-        self.half_radian= np.pi / 180 * 0.5 #half of a slice for calculating area of each of 89 circles and for entire hemispheric photo
+        self.gfp_radian = (np.pi / 180) * np.arange(360) #360 slices around 2*pi for gap fraction calculation
+        self.open_radian = (np.pi / 180) * np.arange(89) #89 slices around 2*pi for openness calculation
+        self.half_radian = (np.pi / 180) * 0.5 #half of a slice for calculating area of each of 89 circles and for entire hemispheric photo
         self.last_rad = self.open_radian[len(self.open_radian)-1] #getting last element in array for total fisheye area calculation
         self.first_rad = self.open_radian[1] #getting first element in array for total fisheye area calculation
 
         #outputs
         self.gap_fractions = np.zeros(89) #result of GapFraction function, initialized empty matrix of 89 to be filled
-        self.openness = int() #empty integer to be filled with results
+        self.canopy_openness = "" #empty integer to be filled with results
 
     #function to calculate gap fractions for 89 circles within hemispheric photo
     def calc_gap_fractions(self):
@@ -94,9 +94,11 @@ class CanopyOpenness():
 
         # logger debugging statement
         logger.debug(f"Calculating gap fraction profile for sub-circles")
-
+        
         # return gap fraction normalized by 360 degrees
-        return self.gap_fractions / 360
+        self.gap_fractions = self.gap_fractions / 360
+
+        return self.gap_fractions
     
     #function to calculate gap fractions for 89 circles within hemispheric photo
     def openness(self):
@@ -122,10 +124,11 @@ class CanopyOpenness():
         Aa = np.sin(self.open_radian + self.half_radian) - np.sin(self.open_radian - self.half_radian) #same calculation but for each sub-circle
 
         #Calculating canopy openness from gap fraction array
-        self.canopy_openness = np.sum(self.gap_fractions* Aa / Atot) #gap fraction array times each sub-circle area normalized by total area of photo
+        self.canopy_openness = np.sum(self.gap_fractions * Aa / Atot) #sum gap fraction array times each sub-circle area normalized by total area of photo
         
         # logger debugging statement
         logger.debug(f"Calculating openness for single hemispheric photo")
+        print('Canopy Openness = ', self.canopy_openness)
 
         # return canopy openness
         return self.canopy_openness
