@@ -8,7 +8,7 @@ Calculating fractions of sunlight (i.e. gap) in hemispheric photos and getting c
 #  - 2) Segments each photo to 89 smaller circles
 #  - 3) Calculates gap fraction or proportion of sky (i.e. 0 in numpy array value) within each circle and returns that list of 89 circles
 #  - 4) Calculates proportion of entire fisheye photo that is sky (i.e. openness) based on those 89 gap fraction values
-#  - 5) Returns the value of canopy openness (will eventually be stored with photo name and info in a csv)
+#  - 5) Returns the value of canopy openness for the hemispheric photo
 
 #-------------------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------------------
@@ -48,6 +48,8 @@ class CanopyOpenness():
         self.gfp_radian = np.pi / 180 * np.arange(360) #360 slices around 2*pi for gap fraction calculation
         self.open_radian = np.pi / 180 * np.arange(89) #89 slices around 2*pi for openness calculation
         self.half_radian= np.pi / 180 * 0.5 #half of a slice for calculating area of each of 89 circles and for entire hemispheric photo
+        self.last_rad = self.open_radian[len(self.open_radian)-1] #getting last element in array for total fisheye area calculation
+        self.first_rad = self.open_radian[1] #getting first element in array for total fisheye area calculation
 
         #outputs
         self.gap_fractions = np.zeros(89) #result of GapFraction function, initialized empty matrix of 89 to be filled
@@ -95,3 +97,35 @@ class CanopyOpenness():
 
         # return gap fraction normalized by 360 degrees
         return self.gap_fractions / 360
+    
+    #function to calculate gap fractions for 89 circles within hemispheric photo
+    def openness(self):
+        """
+        This function takes the self.gap_fractions array of proportion sky for 89 sub-circles in a fisheye photo,
+        and then multiplies that by the area of each sub circle and divides by the total area of the fisheye photo.
+        This yields a single value of the proportion sky (i.e. canopy openness) in a single photo
+
+        PARAMETERS
+        self.last_rad = the radian from the 89th sub-circle
+        self.first_rad = the radian from the 1st sub-circle
+        self.open_radian = the radians for all the sub-circles 
+        self.gap_fractions = the array of proportion sky for each of the 89 sub-circles
+
+        OUTPUT
+        self.openness = proportion (from 0 to 1) of sky in hemispheric photo, 0 being completely closed and 1 being completely open
+        """
+
+        #Total area of fisheye circle
+        Atot = np.sin(self.last_rad + self.half_radian) - np.sin(self.first_rad - self.half_radian) #sin of last sub=circle + half radian minus first sub-circle
+
+        #Area of all the sub-circles (returns array)
+        Aa = np.sin(self.open_radian + self.half_radian) - np.sin(self.open_radian - self.half_radian) #same calculation but for each sub-circle
+
+        #Calculating canopy openness from gap fraction array
+        self.canopy_openness = np.sum(self.gap_fractions* Aa / Atot) #gap fraction array times each sub-circle area normalized by total area of photo
+        
+        # logger debugging statement
+        logger.debug(f"Calculating openness for single hemispheric photo")
+
+        # return canopy openness
+        return self.canopy_openness
