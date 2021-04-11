@@ -40,7 +40,7 @@ class FishEye():
     Class object to get center coordinates, radius of fisheye lens and output new image array with that information
     """
     #function to intialize the class object
-    def __init__(self,fisheye,cx=0,cy=0,cr=0,plot=False):
+    def __init__(self,fisheye,cx=0,cy=0,cr=0):
         """
         Initialize function by saving inputs and outputs in object
         """
@@ -54,12 +54,12 @@ class FishEye():
         self.cr = cr #center radius
         self.rr = "" #radius for circle_perimeter function in skimage
         self.cc = "" #center coordinates for circle_perimeter function in skimage
-        self.plot = plot #boolean, if true will plot images, otherwise won't
         
         #output of new image with center coordinates added
         self.ImageCircle = "" #correct image
         self.ImageCircle2 = "" #numpy array assigned with circle_perimeter (not sure this workd)
         self.circleImage = "" #output of manually set center coordinates and radius in SetCircle function
+        self.circleImage2 = "" #same as circleImage but different format
 
     #function for adding center coordinates of image and radius of center
     def CircleCoords(self):
@@ -101,21 +101,19 @@ class FishEye():
 
         #logger debugging statement
         logger.debug(f"Set center circle...fisheye...coordinates")
-
-        #if user chooses to plot, plotting for user to see the circle around the fisheye
-        if self.plot == True:
-            #Create circle for plotting based on coordinates, color red
-            circle = plt.Circle((self.cx, self.cy), self.cr, color=(1, 0, 0),fill=False)
-            # Open new figure
-            fig = plt.figure()
-            # In figure, Image as background
-            plt.imshow(self.ImageCircle[0], cmap=plt.cm.gray)
-            # Add the circles to figure as subplots
-            fig.add_subplot().add_artist(circle)
-
+        
+        #plotting for user to see the circle around the fisheye
+        #Create circle for plotting based on coordinates, color red
+        circle = plt.Circle((self.cx, self.cy), self.cr, color=(1, 0, 0),fill=False)
+        # Open new figure
+        fig = plt.figure()
+        # In figure, Image as background
+        plt.imshow(self.ImageCircle[0], cmap=plt.cm.gray)
+        # Add the circles to figure as subplots
+        fig.add_subplot().add_artist(circle)
+  
         #return new format of image
-        return self.ImageCircle
-        return self.ImageCircle2
+        return self.ImageCircle#, self.ImageCircle2
 
     #function for setting circle manually, otherwise leaving as is
     def SetCircle(self,cx=0,cy=0,cr=0):
@@ -156,19 +154,19 @@ class FishEye():
         self.circleImage2 = self.fisheye[self.rr,self.cc] = 1 
         
         #logger debugging statement
-        logger.debug(f"Manually setting fisheye coordinates")
+        logger.debug(f"Manually setting fisheye coordinates",self.cx)
+        #Print message displaying coordinates and radius to user
+        print('center circle coordinates = (',self.cx,',',self.cy,')', 'radius = ',self.cr) 
         
-        #if user chooses to plot, plotting for user to see the circle around the fisheye
-        if self.plot == True:
-            #Create circle for plotting based on coordinates, color red
-            circle = plt.Circle((self.cx, self.cy), self.cr, color=(1, 0, 0),fill=False)
-            # Open new figure
-            fig = plt.figure()
-            # In figure, Image as background
-            plt.imshow(self.circleImage[0], cmap=plt.cm.gray)
-            # Add the circles to figure as subplots
-            fig.add_subplot().add_artist(circle)
+        #plotting for user to see the circle around the fisheye
+        #Create circle for plotting based on coordinates, color red
+        circle = plt.Circle((self.cx, self.cy), self.cr, color=(1, 0, 0),fill=False)
+        # Open new figure
+        fig = plt.figure()
+        # In figure, Image as background
+        plt.imshow(self.circleImage[0], cmap=plt.cm.gray)
+        # Add the circles to figure as subplots
+        fig.add_subplot().add_artist(circle)
 
         #return new format of image
-        return self.circleImage
-        return self.circleImage2
+        return self.circleImage #, self.circleImage2
