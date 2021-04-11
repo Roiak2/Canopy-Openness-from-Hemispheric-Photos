@@ -12,12 +12,15 @@ from CanopyOpenness import FishEye
 from CanopyOpenness import CanOpen
 
 
-def set_loglevel(loglevel="INFO"):
+
+def set_loglevel(loglevel="INFO",quiet=False):
     """
     Set the loglevel for loguru logger. Using 'enable' here as 
     described in the loguru docs for logging inside of a library.
     This sets the level at which logger calls will be displayed 
     throughout the rest of the code.
+
+    Also adds option to disable logging messages if quiet==True
 
     Example:
       # example notebook usage:
@@ -39,4 +42,8 @@ def set_loglevel(loglevel="INFO"):
         "colorize": True, # sys.stdout.isatty() will only use color when supported.
     }]
     logger.configure(**config)
-    logger.enable("CanopyOpenness")
+
+    if quiet == True:
+      logger.disable("CanopyOpenness")
+    else:
+      logger.enable("CanopyOpenness")
