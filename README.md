@@ -34,7 +34,7 @@ pip install -e .
 
 After loading the program in your machine, you can go to the WorkingExample jupyter notebook found in the top directory of this repo.
 
-That notebook contains a sample workflow for you to test the ImageLoad, FishEye, and CanopyOpenness modules with a sample photo (you can try it on your own pictures as well).
+That notebook contains two sample workflows for you to test the ImageLoad, FishEye, and CanopyOpenness modules with a single sample photo or batch processing of all images in a given directory (you can try it on your own pictures as well).
 
 As the package gets developed, the working example notebook will be updated to reflect developments.
 

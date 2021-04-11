@@ -28,6 +28,7 @@ Currently there is a demo Jupyter Notebook found in the package for a user to tr
 │   └── Sample_Photo_Threshold.jpg
 ├── WorkingExample.ipynb
 ├── Batch_Test.ipynb
+├── Batch_Test_Dataframe.csv
 ├── paired-programming-demo.ipynb
 ├── paired-programming.md
 ├── README.md
@@ -50,7 +51,8 @@ The root branch of the repo has:
    - a README file with instructions for installations and brief description of the package
    - a written proposal for the project: `proposal.md` with more details (i.e. this file you're reading right now:)  
    - a jupyter notebook `WorkingExample.ipynb` with a basic workflow for users to see how the package works  
-   - another jupyter notebook `Batch_test.ipynb` to test out functions for batch image processing
+   - another jupyter notebook `Batch_Test.ipynb` to test out functions for batch image processing
+   - a sample dataframe `Batch_Test_Dataframe.csv` that's saved automatically from the `Batch_Test.ipynb` demo script
    - two `paired-programming` files with comments from peers and code suggestions (thank you Scarlet Au and Catherine Lan!)
    - a `setup.py` file that allows installation of the in-development package in a user's machine
  
