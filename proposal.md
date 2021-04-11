@@ -15,37 +15,42 @@ Currently there is a demo Jupyter Notebook found in the package for a user to tr
 ```bash
 .
 ├── CanopyOpenness
+│   ├── BatchRun.py
 │   ├── CanOpen.py
 │   ├── CanOpenness Demo Script.ipynb     
-│   ├── CanopyOpenness.py
 │   ├── FishEye.py
 │   ├── ImageLoad.py
-│   └── __init__.py 
+│   ├── TrialFuncs.py
+│   └── __init__.py
 ├── examples
 │   ├── Batch_Test
 │   ├── Sample_Photo.JPG
-│   └── Sample_Photo_Threshold.jpg   
-├── README.md
+│   └── Sample_Photo_Threshold.jpg
 ├── WorkingExample.ipynb
-├── proposal.md
+├── Batch_Test.ipynb
 ├── paired-programming-demo.ipynb
 ├── paired-programming.md
+├── README.md
+├── proposal.md
 └── setup.py
 
 ```
 The *CanopyOpenness* folder contains the modules for the package and the init file.
-   - So far `ImageLoad.py`,`FishEye.py`  and  `CanopyOpenness.py` are up and running. These are meant to run sequentially 
+   - So far `ImageLoad.py`,`FishEye.py`  and  `CanOpen.py` are up and running. These are meant to run sequentially 
      - `ImageLoad.py` takes a filepath and loads an image, thresholds it, and turns into black and white (canopy vs. sky)
      - `FishEye.py` takes the bw photo and outlines the fisheye lens circle, allowing users to adjust if necessary
-     - `CanopyOpenness.py` takes the segmented circle in the bw photo and calculates the amount of light entering the canopy as a fraction from 1.
-   - `CanOpen.py` is a script to test out class objects, and `CanOpenness Demo Script.ipynb` is a jupyter notebook that outputs tests of that script.
+     - `CanOpen.py` takes the segmented circle in the bw photo and calculates the amount of light entering the canopy as a fraction from 1.
+   - `BatchRun.py` processes images in batch following the same workflow as described immediately above. Still in development
+   - `TrialFuncs.py` is a script to test out class objects, and `CanOpenness Demo Script.ipynb` is a jupyter notebook that outputs tests of that script.
 
-The *examples* folder contains sample photos used to test code and photos for users to test out the package.
+The *examples* folder contains sample photos used to test code and photos for users to test out the package. 
+*Batch_Test* within that folder has photos for testing batch image processing.
 
 The root branch of the repo has:
    - a README file with instructions for installations and brief description of the package
    - a written proposal for the project: `proposal.md` with more details (i.e. this file you're reading right now:)  
    - a jupyter notebook `WorkingExample.ipynb` with a basic workflow for users to see how the package works  
+   - another jupyter notebook `Batch_test.ipynb` to test out functions for batch image processing
    - two `paired-programming` files with comments from peers and code suggestions (thank you Scarlet Au and Catherine Lan!)
    - a `setup.py` file that allows installation of the in-development package in a user's machine
  
