@@ -40,7 +40,7 @@ class FishEye():
     Class object to get center coordinates, radius of fisheye lens and output new image array with that information
     """
     #function to intialize the class object
-    def __init__(self,fisheye,cx=0,cy=0,cr=0,plot=False):
+    def __init__(self,fisheye,cx=0,cy=0,cr=0,plot=False,batch=False):
         """
         Initialize function by saving inputs and outputs in object
         """
@@ -55,6 +55,7 @@ class FishEye():
         self.rr = "" #radius for circle_perimeter function in skimage
         self.cc = "" #center coordinates for circle_perimeter function in skimage
         self.plot = plot #boolean, if true plots images, otherwise won't, defaults to False
+        self.batch = batch #boolean, if true means we're batch processing so different print messages, defaults to False
         
         #output of new image with center coordinates added
         self.ImageCircle = "" #correct image
@@ -89,8 +90,10 @@ class FishEye():
         #radius of the hemispheric photo center
         self.cr = int((self.shape[0]/2)-150)
 
-        #Print message displaying coordinates and radius to user
-        print('center circle coordinates = (',self.cx,',',self.cy,')', 'radius = ',self.cr) 
+        #if only processing single image
+        if self.batch == False:
+            #Print message displaying coordinates and radius to user
+            print('center circle coordinates = (',self.cx,',',self.cy,')', 'radius = ',self.cr) 
 
         #ADD TO NUMPY ARRAY
         #draw circle perimeter based on above coordinates and radius
@@ -100,8 +103,10 @@ class FishEye():
         #Assigning to numpy array another way for plotting
         self.ImageCircle2 = self.fisheye[self.rr,self.cc] = 1 
 
-        #logger debugging statement
-        logger.debug(f"Set center circle...fisheye...coordinates")
+        #if only processing single image
+        if self.batch == False:
+            #logger debugging statement
+            logger.debug(f"Set center circle...fisheye...coordinates")
         
         #plotting for user to see the circle around the fisheye if plot is true
         if self.plot == True:
@@ -155,10 +160,12 @@ class FishEye():
         #Assigning to numpy array another way for plotting
         self.circleImage2 = self.fisheye[self.rr,self.cc] = 1 
         
-        #logger debugging statement
-        logger.debug(f"Manually setting fisheye coordinates",self.cx)
-        #Print message displaying coordinates and radius to user
-        print('center circle coordinates = (',self.cx,',',self.cy,')', 'radius = ',self.cr) 
+        #if only processing single image
+        if self.batch == False:
+            #logger debugging statement
+            logger.debug(f"Manually setting fisheye coordinates",self.cx)
+            #Print message displaying coordinates and radius to user
+            print('center circle coordinates = (',self.cx,',',self.cy,')', 'radius = ',self.cr) 
         
         #plotting for user to see the circle around the fisheye if plot is true
         if self.plot == True:

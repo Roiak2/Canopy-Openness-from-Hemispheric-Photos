@@ -39,7 +39,7 @@ class ImagePrep():
     """
     Class object to load image files and convert them to black and white image based on a threshold
     """
-    def __init__(self, filepath, filename,threshold=0,threshold_method="otsu",plot=False):
+    def __init__(self, filepath, filename,threshold=0,threshold_method="otsu",plot=False,batch=False):
         """
         Initialize function by saving inputs and outputs in object
         """
@@ -51,6 +51,7 @@ class ImagePrep():
         self.threshold = int(threshold) #manually set threshold, default is none
         self.threshold_method = threshold_method #threshold algorithm, defaults to otsu or can be isodata
         self.plot = plot #boolean, if true will plot outputs, otherwise won't
+        self.batch = batch #boolean, if true batch processing so different logger messages, defaults to false
         
         # store outputs from imageLoad
         self.photo_location = ""
@@ -88,9 +89,11 @@ class ImagePrep():
         if self.plot == True:
             #plot photo
             plt.imshow(self.photo)
-
-        #Debugging logger message
-        logger.debug(f"loaded image: {self.filename}")
+        
+        #if only processing single image
+        if self.batch == False:
+            #Debugging logger message
+            logger.debug(f"loaded image: {self.filename}")
         #return photo
         return self.photo
 
@@ -117,9 +120,11 @@ class ImagePrep():
         if self.plot == True:
             #plot photo
             plt.imshow(self.image) 
-        
-        #debugging logger message
-        logger.debug(f"converted image to blue...") 
+
+        #if only processing single image
+        if self.batch == False:
+            #debugging logger message
+            logger.debug(f"converted image to blue...") 
         #return photo
         return self.image
 
@@ -145,13 +150,19 @@ class ImagePrep():
         #   either manually with user input, or based on algorithms: otsu or isodata
         if self.threshold == 0 and self.threshold_method == "otsu": #if method is otsu, use that (default) and print message
             self.threshold = threshold_otsu(self.gray_image)
-            print("Threshold = ",round(self.threshold,2), "Method = ",self.threshold_method)
+            #if only processing single image
+            if self.batch == False:
+                print("Threshold = ",round(self.threshold,2), "Method = ",self.threshold_method)
         if self.threshold == 0 and self.threshold_method == "isodata": #if method is isodata, use that and print message
             self.threshold = threshold_isodata(self.gray_image)
-            print("Threshold = ",round(self.threshold,2), "Method = ",self.threshold_method)
+            #if only processing single image
+            if self.batch == False:
+                print("Threshold = ",round(self.threshold,2), "Method = ",self.threshold_method)
         else: #if manual threshold inserted, override algorithm and use manual threshold and print message
             self.threshold = self.threshold
-            print("Threshold = ",round(self.threshold,2), "Method = User input")
+            #if only processing single image
+            if self.batch == False:
+                print("Threshold = ",round(self.threshold,2), "Method = User input")
         
         #create new image 
         self.binary = self.gray_image > self.threshold
@@ -161,8 +172,10 @@ class ImagePrep():
             #plots image
             plt.imshow(self.binary,cmap=plt.cm.gray) 
         
-        #debugging logger message
-        logger.debug(f"converted image to BW ...threshold...")
+        #if only processing single image
+        if self.batch == False:
+            #debugging logger message
+            logger.debug(f"converted image to BW ...threshold...")
         
         #returns it
         return self.binary

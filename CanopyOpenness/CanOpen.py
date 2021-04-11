@@ -32,12 +32,13 @@ class CanOpen():
     Class object to get fractions of sunlight (i.e. gap) in hemispheric photos and getting canopy openness metric for a photo
     """
     #function to intialize the class object
-    def __init__(self,fisheye):
+    def __init__(self,fisheye,batch=False):
         """
         Initialize function by saving inputs and outputs in object
         """
         #input (image file from ImageLoad class object)
         self.fisheye = fisheye #image
+        self.batch = batch #boolean, if true processing in batch so changes logger messages, defaults to false
 
         # get x,y and r of circle
         self.cx = self.fisheye[1]
@@ -92,8 +93,10 @@ class CanOpen():
                 xdeg = x[degree] #get iteration of x array
                 self.gap_fractions[step] +=  self.fisheye[0][int(np.round(ydeg,3)), int(np.round(xdeg,3))] #calculate proportion sky from image array and insert into gap fraction empty matrix
 
-        # logger debugging statement
-        logger.debug(f"Calculating gap fraction profile for sub-circles")
+        #if only processing single image
+        if self.batch == False:
+            # logger debugging statement
+            logger.debug(f"Calculating gap fraction profile for sub-circles")
         
         # return gap fraction normalized by 360 degrees
         self.gap_fractions = self.gap_fractions / 360
@@ -126,9 +129,11 @@ class CanOpen():
         #Calculating canopy openness from gap fraction array
         self.canopy_openness = np.sum(self.gap_fractions * Aa / Atot) #sum gap fraction array times each sub-circle area normalized by total area of photo
         
-        # logger debugging statement
-        logger.debug(f"Calculating openness for single hemispheric photo")
-        print('Canopy Openness = ', self.canopy_openness)
+        #if only processing single image
+        if self.batch == False:
+            # logger debugging statement
+            logger.debug(f"Calculating openness for single hemispheric photo")
+            print('Canopy Openness = ', self.canopy_openness)
 
         # return canopy openness
         return self.canopy_openness
