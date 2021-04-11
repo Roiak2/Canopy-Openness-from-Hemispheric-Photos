@@ -6,7 +6,7 @@
 ### Description of Project Goal:
 Canopy openness - the amount of light penetrating a canopy - is a crucial metric in understanding ecosystem dynamics and function, especially after a disturbance like a fire or a cyclone.
 
-This package assists foresters by taking an input of hemispheric photos, calculating canopy openness for the photos, and outputting a dataframe with the results, as well as pretty plots.
+This package assists foresters by taking an input of hemispheric photos, calculating canopy openness for the photos, and outputting a dataframe with the results, as well as pretty plots. This works on single images or for a batch mode using a directory full of images.
 
 Currently there is a demo Jupyter Notebook found in the package for a user to try and test out the functions on their own images.
 
@@ -17,40 +17,45 @@ Currently there is a demo Jupyter Notebook found in the package for a user to tr
 ├── CanopyOpenness
 │   ├── CanOpen.py
 │   ├── CanOpenness Demo Script.ipynb     
+│   ├── CanopyOpenness.py
 │   ├── FishEye.py
 │   ├── ImageLoad.py
-│   └── __init__.py     
+│   └── __init__.py 
 ├── examples
+│   ├── Batch_Test
 │   ├── Sample_Photo.JPG
-│   ├── Sample_Photo_Threshold.jpg        
-│   └── Test Photos
+│   └── Sample_Photo_Threshold.jpg   
 ├── README.md
 ├── WorkingExample.ipynb
+├── proposal.md
 ├── paired-programming-demo.ipynb
 ├── paired-programming.md
-├── proposal.md
 └── setup.py
+
 ```
 The *CanopyOpenness* folder contains the modules for the package and the init file.
-   - So far `FishEye.py` and `ImageLoad.py` are up and running. 
+   - So far `ImageLoad.py`,`FishEye.py`  and  `CanopyOpenness.py` are up and running. These are meant to run sequentially 
+     - `ImageLoad.py` takes a filepath and loads an image, thresholds it, and turns into black and white (canopy vs. sky)
+     - `FishEye.py` takes the bw photo and outlines the fisheye lens circle, allowing users to adjust if necessary
+     - `CanopyOpenness.py` takes the segmented circle in the bw photo and calculates the amount of light entering the canopy as a fraction from 1.
    - `CanOpen.py` is a script to test out class objects, and `CanOpenness Demo Script.ipynb` is a jupyter notebook that outputs tests of that script.
 
-The *examples* folder contains sample photos used to test code and will eventually contain photos for users to test out the package.
+The *examples* folder contains sample photos used to test code and photos for users to test out the package.
 
 The root branch of the repo has:
    - a README file with instructions for installations and brief description of the package
-   - a written proposal for the project: `proposal.md` with more details  
+   - a written proposal for the project: `proposal.md` with more details (i.e. this file you're reading right now:)  
    - a jupyter notebook `WorkingExample.ipynb` with a basic workflow for users to see how the package works  
-   - a `setup.py` file that allows installation of the in-development package in a user's machine
    - two `paired-programming` files with comments from peers and code suggestions (thank you Scarlet Au and Catherine Lan!)
+   - a `setup.py` file that allows installation of the in-development package in a user's machine
  
-
 Dependencies and libraries for this package include:
   1. `pandas`: to output and store results in a dataframe  
   2. `numpy`: to carry out statistical calculations 
   3. `skimage`: to manipulate photos and threshold colors in inputted images  
-  4. `pathlib` & `natsort`: to handle multiple files at once from a directory
+  4. `pathlib`, `os`, `glob` & `natsort`: to handle multiple files at once from a directory
   5. `matplotlib`: to display results and images
+  6. `loguru` to log messages 
 
 ### User Input and Interface
 The program requires the user to input image files. These will be jpeg or png files and should be fisheye photos.
@@ -67,11 +72,17 @@ An example below:
 #import program
 import CanopyOpenness
 
-#load single image
+#load single image and turn into black and white (canopy vs. sky)
 image = CanopyOpenness.ImageLoad.ImagePrep("./images/[image name].jpg)
 
-#alternatively, can load batch images from single directory
-batch_images = CanopyOpenness.ImageBatchLoad.ImagePrep("images/",pattern = ".JPEG")
+#calculate fisheye coordinates to only look at the proper image
+image = CanopyOpenness.FishEye.FishEye(image)
+
+#calculate openness as fraction sky (i.e. white) in the fisheye lens image (overkill with module and class object names, I know)
+openness = CanopyOpenness.CanopyOpenness.CanopyOpenness(image)
+
+#alternatively, can load all images from single directory and run the above functions on all images, returning a csv with results
+batch_images = CanopyOpenness.BatchLoad("images/",pattern = ".JPEG")
 
 ```
 Therefore this program uses a Python API so users can interactively tweak and view results to fit their preferred use.
