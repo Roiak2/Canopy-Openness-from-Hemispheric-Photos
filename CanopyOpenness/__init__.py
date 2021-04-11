@@ -7,10 +7,9 @@ __version__ = "0.0.3"
 
 import sys
 from loguru import logger
-from CanopyOpenness import CanOpen
 from CanopyOpenness import ImageLoad
 from CanopyOpenness import FishEye
-from CanopyOpenness import CanopyOpenness
+from CanopyOpenness import CanOpen
 
 
 def set_loglevel(loglevel="INFO"):
