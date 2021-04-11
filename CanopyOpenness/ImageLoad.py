@@ -39,7 +39,7 @@ class ImagePrep():
     """
     Class object to load image files and convert them to black and white image based on a threshold
     """
-    def __init__(self, filepath, filename,threshold=0,threshold_method="otsu"):
+    def __init__(self, filepath, filename,threshold=0,threshold_method="otsu",plot=False):
         """
         Initialize function by saving inputs and outputs in object
         """
@@ -50,6 +50,7 @@ class ImagePrep():
         self.filename = filename
         self.threshold = int(threshold) #manually set threshold, default is none
         self.threshold_method = threshold_method #threshold algorithm, defaults to otsu or can be isodata
+        self.plot = plot #boolean, if true will plot outputs, otherwise won't
         
         # store outputs from imageLoad
         self.photo_location = ""
@@ -82,8 +83,12 @@ class ImagePrep():
         self.photo_location = os.path.join(self.filepath, self.filename) 
         #reading image file using io.imread from skimage
         self.photo = io.imread(self.photo_location) 
-        #plot photo
-        plt.imshow(self.photo)
+
+        #if user chooses to plot photo
+        if self.plot == True:
+            #plot photo
+            plt.imshow(self.photo)
+
         #Debugging logger message
         logger.debug(f"loaded image: {self.filename}")
         #return photo
@@ -107,8 +112,12 @@ class ImagePrep():
         
         self.image[:,:,0] = 0 #changing channels
         self.image[:,:,1] = 0 
-        #plot photo
-        plt.imshow(self.image) 
+        
+        #if user chooses to plot photo
+        if self.plot == True:
+            #plot photo
+            plt.imshow(self.image) 
+        
         #debugging logger message
         logger.debug(f"converted image to blue...") 
         #return photo
@@ -146,8 +155,12 @@ class ImagePrep():
         
         #create new image 
         self.binary = self.gray_image > self.threshold
-        #plots image
-        plt.imshow(self.binary,cmap=plt.cm.gray)
+        
+        #if user chooses to plot photo
+        if self.plot == True:
+            #plots image
+            plt.imshow(self.binary,cmap=plt.cm.gray) 
+        
         #debugging logger message
         logger.debug(f"converted image to BW ...threshold...")
         

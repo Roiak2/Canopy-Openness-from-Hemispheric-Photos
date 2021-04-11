@@ -40,7 +40,7 @@ class FishEye():
     Class object to get center coordinates, radius of fisheye lens and output new image array with that information
     """
     #function to intialize the class object
-    def __init__(self,fisheye,cx=0,cy=0,cr=0):
+    def __init__(self,fisheye,cx=0,cy=0,cr=0,plot=False):
         """
         Initialize function by saving inputs and outputs in object
         """
@@ -54,6 +54,7 @@ class FishEye():
         self.cr = cr #center radius
         self.rr = "" #radius for circle_perimeter function in skimage
         self.cc = "" #center coordinates for circle_perimeter function in skimage
+        self.plot = plot #boolean, if true will plot images, otherwise won't
         
         #output of new image with center coordinates added
         self.ImageCircle = "" #correct image
@@ -101,15 +102,16 @@ class FishEye():
         #logger debugging statement
         logger.debug(f"Set center circle...fisheye...coordinates")
 
-        #plotting for user to see the circle around the fisheye
-        #Create circle for plotting based on coordinates, color red
-        circle = plt.Circle((self.cx, self.cy), self.cr, color=(1, 0, 0),fill=False)
-        # Open new figure
-        fig = plt.figure()
-        # In figure, Image as background
-        plt.imshow(self.ImageCircle[0], cmap=plt.cm.gray)
-        # Add the circles to figure as subplots
-        fig.add_subplot().add_artist(circle)
+        #if user chooses to plot, plotting for user to see the circle around the fisheye
+        if self.plot == True:
+            #Create circle for plotting based on coordinates, color red
+            circle = plt.Circle((self.cx, self.cy), self.cr, color=(1, 0, 0),fill=False)
+            # Open new figure
+            fig = plt.figure()
+            # In figure, Image as background
+            plt.imshow(self.ImageCircle[0], cmap=plt.cm.gray)
+            # Add the circles to figure as subplots
+            fig.add_subplot().add_artist(circle)
 
         #return new format of image
         return self.ImageCircle
@@ -156,15 +158,16 @@ class FishEye():
         #logger debugging statement
         logger.debug(f"Manually setting fisheye coordinates")
         
-        #plotting for user to see the circle around the fisheye
-        #Create circle for plotting based on coordinates, color red
-        circle = plt.Circle((self.cx, self.cy), self.cr, color=(1, 0, 0),fill=False)
-        # Open new figure
-        fig = plt.figure()
-        # In figure, Image as background
-        plt.imshow(self.circleImage[0], cmap=plt.cm.gray)
-        # Add the circles to figure as subplots
-        fig.add_subplot().add_artist(circle)
+        #if user chooses to plot, plotting for user to see the circle around the fisheye
+        if self.plot == True:
+            #Create circle for plotting based on coordinates, color red
+            circle = plt.Circle((self.cx, self.cy), self.cr, color=(1, 0, 0),fill=False)
+            # Open new figure
+            fig = plt.figure()
+            # In figure, Image as background
+            plt.imshow(self.circleImage[0], cmap=plt.cm.gray)
+            # Add the circles to figure as subplots
+            fig.add_subplot().add_artist(circle)
 
         #return new format of image
         return self.circleImage
