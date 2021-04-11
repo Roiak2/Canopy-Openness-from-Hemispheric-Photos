@@ -4,6 +4,14 @@ Canopy openness - the amount of light penetrating a canopy - is a crucial metric
 
 This package assists foresters by taking an input of hemispheric photos, calculating canopy openness for the photos, and outputting a dataframe with the results, as well as pretty plots.
 
+This package is inspired by Hans ter Steege (2018) Hemiphot.R: Free R scripts to analyse hemispherical 
+photographs for canopy openness, leaf area index and photosynthetic active radiation under forest canopies.  
+Unpublished report. Naturalis Biodiversity Center, Leiden, The Netherlands, https://github.com/Hans-ter-Steege/Hemiphot
+
+The updates of this package to Hans ter Steege's are:
+    - This is in python and therefore accessible to others who don't use R
+    - This package uses thresholding algorithms instead of manually thresholding images to more objectively calculate openness in batch mode
+
 ### In Development
 
 This program can be installed this way:
