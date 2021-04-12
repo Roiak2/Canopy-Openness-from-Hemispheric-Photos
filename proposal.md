@@ -73,7 +73,7 @@ The program requires the user to input image files. These will be jpeg or png fi
 
 For example:
 
-<img src="examples/Sample_Photo.JPG" height="200">
+<img src="sample_photos/Sample_Photo.JPG" height="200">
 
 The photo is then loaded and saved to be manipulated. This can be easily achieved once the program is loaded into a notebook/script/command line. 
 
@@ -116,7 +116,7 @@ A csv output example:
 
 A photo example showing black and white for canopy vs. sky:
 
-<img src="examples/Sample_Photo_Threshold.jpg" height="200">
+<img src="sample_photos/Sample_Photo_Threshold.jpg" height="200">
 
 **Output locations -**
 The user will be able to save the resultant csv and plots into a directory of their choosing, whether in a remote server or on their own machine by choosing a filepath.
