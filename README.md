@@ -32,9 +32,14 @@ pip install -e .
 
 ### Working example
 
-After loading the program in your machine, you can go to the WorkingExample jupyter notebook found in the top directory of this repo.
+After loading the program in your machine, you can go to the `WorkingExample.ipynb` and `Batch_Test.ipynb` jupyter notebooks found in the top directory of this repo. Do this by running this code after making sure to cd into the repo on your machine:
 
-That notebook contains two sample workflows for you to test the ImageLoad, FishEye, and CanopyOpenness modules with a single sample photo or batch processing of all images in a given directory (you can try it on your own pictures as well).
+```
+jupyter notebook .
+
+```
+
+These notebooks contain two sample workflows for you to test the ImageLoad, FishEye, and CanopyOpenness modules with a single sample photo or batch processing of all images in a given directory (you can try it on your own pictures as well).
 
 As the package gets developed, the working example notebook will be updated to reflect developments.
 
