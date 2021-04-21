@@ -37,7 +37,7 @@ class BatchRun():
     Class object to run ImageLoad, FishEye, and CanOpen on an entire directory of image files
     """
     # Function to initialize class object
-    def __init__(self, dirpath, savepath, filename, save=False):
+    def __init__(self, dirpath, filepath, filename, save=False):
         """
         Initialize function by saving inputs and outputs in object
         """
@@ -45,11 +45,12 @@ class BatchRun():
 
         # inputs
         self.dirpath = dirpath #where directory of images is 
-        self.savepath = savepath #directory where user wants to save dataframe
-        self.filename = filename #if user saves dataframe, name of that dataframe
+        self.filepath = filepath #directory where user wants to save dataframe
+        self.filename = filename #if user saves dataframe, name of that dataframe (has to end in '.csv')
         self.save = save #boolean, if True, will save resultant dataframe, if False no, defaults to False
 
         # outputs
+        self.savepath = os.path.join(self.filepath, self.filename) # where user wants to save
         self.images = [f for f in os.listdir(dirpath) if f.endswith('JPG')] #list all jpeg files in a directory
         self.images.sort() #sort them
         self.results = [] #initialize empty list to store results
@@ -103,3 +104,19 @@ class BatchRun():
 
         # return the resultant dataframe to the user
         return self.df
+    
+    # Function to save dataframe to file
+    def SaveDF(self):
+        """
+        This function takes the resultant dataframe made above and saves to file with user input
+        """
+
+        # if user doesn't want to save
+        if self.save == False:
+            # return dataframe and do nothing
+            return self.df
+
+        # if user wants to save    
+        if self.save == True:
+           # save to file given user input
+           self.df.to_csv(r'self.savepath', index=False) 
