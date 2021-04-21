@@ -92,7 +92,7 @@ class BatchRun():
             #print message to user
             #print("Image",image, "processed")
             # logger debugging statement
-            logger.debug(f"Image",image, "processed")
+            logger.debug(f"Image {image} Processed")
 
             #appending to result list
             self.results.append(openness)
