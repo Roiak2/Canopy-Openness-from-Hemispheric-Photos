@@ -86,8 +86,8 @@ class BatchRun():
             
             #run canopy openness module, set to batch
             gfp = CanOpen.CanOpen(fishy,batch=True) #running module
-            gaps=gfp.calc_gap_fractions() #calculating array of proportion sky for 89 sub-circles within fisheye lens
-            openness=gfp.openness() #openness calculation
+            gaps = gfp.calc_gap_fractions() #calculating array of proportion sky for 89 sub-circles within fisheye lens
+            openness = gfp.openness() #openness calculation
             
             #print message to user
             #print("Image",image, "processed")
@@ -119,4 +119,5 @@ class BatchRun():
         # if user wants to save    
         if self.save == True:
            # save to file given user input
-           self.df.to_csv(r'self.savepath', index=False) 
+           self.df.to_csv(self.savepath, index=False) 
+           return self.df
