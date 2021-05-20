@@ -56,7 +56,6 @@ class ImagePrep():
         # store outputs from imageLoad
         self.photo_location = ""
         self.photo = ""   
-        self.shape = self.photo.shape
         
         # input for BluePic (uses self.photo from imageLoad)
         # output for BluePic
@@ -87,7 +86,7 @@ class ImagePrep():
         self.photo = io.imread(self.photo_location) 
 
         #if the image axes are reversed
-        if self.shape[0] < 3000:
+        if self.photo.shape[0] > 3000:
             self.photo = np.rot90(self.photo) #rotate image 90 degrees
 
         #if user chooses to plot photo
