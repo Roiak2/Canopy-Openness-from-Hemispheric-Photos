@@ -48,7 +48,6 @@ class BatchRun():
         self.filepath = filepath #directory where user wants to save dataframe
         self.filename = filename #if user saves dataframe, name of that dataframe (has to end in '.csv')
         self.save = save #boolean, if True, will save resultant dataframe, if False no, defaults to False
-        self.flip = flip #boolean, if true then images need to be flipped 90 degrees before processing
 
         # outputs
         self.savepath = os.path.join(self.filepath, self.filename) # where user wants to save

@@ -52,7 +52,6 @@ class ImagePrep():
         self.threshold_method = threshold_method #threshold algorithm, defaults to otsu or can be isodata
         self.plot = plot #boolean, if true will plot outputs, otherwise won't
         self.batch = batch #boolean, if true batch processing so different logger messages, defaults to false
-        self.flip = flip #boolean, if true then image axes are reversed and need to be rotated 90 degrees
         
         # store outputs from imageLoad
         self.photo_location = ""
