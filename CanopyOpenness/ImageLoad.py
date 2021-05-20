@@ -39,7 +39,7 @@ class ImagePrep():
     """
     Class object to load image files and convert them to black and white image based on a threshold
     """
-    def __init__(self, filepath, filename,threshold=0,threshold_method="otsu",plot=False,batch=False):
+    def __init__(self, filepath, filename,threshold=0,threshold_method="otsu",plot=False,batch=False,flip=False):
         """
         Initialize function by saving inputs and outputs in object
         """
@@ -52,6 +52,7 @@ class ImagePrep():
         self.threshold_method = threshold_method #threshold algorithm, defaults to otsu or can be isodata
         self.plot = plot #boolean, if true will plot outputs, otherwise won't
         self.batch = batch #boolean, if true batch processing so different logger messages, defaults to false
+        self.flip = flip #boolean, if true then image axes are reversed and need to be rotated 90 degrees
         
         # store outputs from imageLoad
         self.photo_location = ""
@@ -84,6 +85,10 @@ class ImagePrep():
         self.photo_location = os.path.join(self.filepath, self.filename) 
         #reading image file using io.imread from skimage
         self.photo = io.imread(self.photo_location) 
+
+        #if the image axes are reversed
+        if self.flip == True:
+            self.photo = np.rot90(self.photo) #rotate image 90 degrees
 
         #if user chooses to plot photo
         if self.plot == True:
