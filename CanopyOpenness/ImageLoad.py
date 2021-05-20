@@ -39,7 +39,7 @@ class ImagePrep():
     """
     Class object to load image files and convert them to black and white image based on a threshold
     """
-    def __init__(self, filepath, filename,threshold=0,threshold_method="otsu",plot=False,batch=False,flip=False):
+    def __init__(self, filepath, filename,threshold=0,threshold_method="otsu",plot=False,batch=False):
         """
         Initialize function by saving inputs and outputs in object
         """
@@ -57,6 +57,7 @@ class ImagePrep():
         # store outputs from imageLoad
         self.photo_location = ""
         self.photo = ""   
+        self.shape = self.photo.shape
         
         # input for BluePic (uses self.photo from imageLoad)
         # output for BluePic
@@ -87,7 +88,7 @@ class ImagePrep():
         self.photo = io.imread(self.photo_location) 
 
         #if the image axes are reversed
-        if self.flip == True:
+        if self.shape[0] < 3000:
             self.photo = np.rot90(self.photo) #rotate image 90 degrees
 
         #if user chooses to plot photo

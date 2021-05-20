@@ -37,7 +37,7 @@ class BatchRun():
     Class object to run ImageLoad, FishEye, and CanOpen on an entire directory of image files
     """
     # Function to initialize class object
-    def __init__(self, dirpath, filepath, filename, save=False,flip=False):
+    def __init__(self, dirpath, filepath, filename, save=False):
         """
         Initialize function by saving inputs and outputs in object
         """
@@ -71,63 +71,32 @@ class BatchRun():
         """
         # for loop iterating through each image in directory
         for image in self.images:
-            #if numpy array axes are reversed    
-            if self.flip == True:
-                #load image and threshold using isodata algorithm, don't plot, set to batch
-                img = ImageLoad.ImagePrep(self.dirpath,image,threshold_method="isodata",plot=False,batch=True,flip=True)
-                #load image
-                og = img.imageLoad()
-                #turn blue 
-                blue = img.BluePic()
-                #threshold algorithm and turn to black and white
-                bw = img.bwPic()
+            #load image and threshold using isodata algorithm, don't plot, set to batch
+            img = ImageLoad.ImagePrep(self.dirpath,image,threshold_method="isodata",plot=False,batch=True)
+            #load image
+            og = img.imageLoad()
+            #turn blue 
+            blue = img.BluePic()
+            #threshold algorithm and turn to black and white
+            bw = img.bwPic()
                 
-                #set fisheye coordinates for center lens, don't plot, set to batch
-                fish = FishEye.FishEye(bw,plot=False,batch=True)
-                #save image array with coordinates
-                fishy = fish.CircleCoords()
+            #set fisheye coordinates for center lens, don't plot, set to batch
+            fish = FishEye.FishEye(bw,plot=False,batch=True)
+            #save image array with coordinates
+            fishy = fish.CircleCoords()
                 
-                #run canopy openness module, set to batch
-                gfp = CanOpen.CanOpen(fishy,batch=True) #running module
-                gaps = gfp.calc_gap_fractions() #calculating array of proportion sky for 89 sub-circles within fisheye lens
-                openness = gfp.openness() #openness calculation
+            #run canopy openness module, set to batch
+            gfp = CanOpen.CanOpen(fishy,batch=True) #running module
+            gaps = gfp.calc_gap_fractions() #calculating array of proportion sky for 89 sub-circles within fisheye lens
+            openness = gfp.openness() #openness calculation
                 
-                #print message to user
-                #print("Image",image, "processed")
-                # logger debugging statement
-                logger.debug(f"Image {image} Processed")
+            #print message to user
+            #print("Image",image, "processed")
+            # logger debugging statement
+            logger.debug(f"Image {image} Processed")
 
-                #appending to result list
-                self.results.append(openness)
-                
-            #if numpy array axes are normal   
-            if self.flip == False:
-                #load image and threshold using isodata algorithm, don't plot, set to batch
-                img = ImageLoad.ImagePrep(self.dirpath,image,threshold_method="isodata",plot=False,batch=True,flip=False)
-                #load image
-                og = img.imageLoad()
-                #turn blue 
-                blue = img.BluePic()
-                #threshold algorithm and turn to black and white
-                bw = img.bwPic()
-                
-                #set fisheye coordinates for center lens, don't plot, set to batch
-                fish = FishEye.FishEye(bw,plot=False,batch=True)
-                #save image array with coordinates
-                fishy = fish.CircleCoords()
-                
-                #run canopy openness module, set to batch
-                gfp = CanOpen.CanOpen(fishy,batch=True) #running module
-                gaps = gfp.calc_gap_fractions() #calculating array of proportion sky for 89 sub-circles within fisheye lens
-                openness = gfp.openness() #openness calculation
-                
-                #print message to user
-                #print("Image",image, "processed")
-                # logger debugging statement
-                logger.debug(f"Image {image} Processed")
-
-                #appending to result list
-                self.results.append(openness)
+            #appending to result list
+            self.results.append(openness)
 
         # append values from result to the dataframe with metadata of images
         self.df['Openness'] = self.results
