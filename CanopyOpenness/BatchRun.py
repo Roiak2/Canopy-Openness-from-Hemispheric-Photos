@@ -55,11 +55,24 @@ class BatchRun():
         self.images.sort() #sort them
         self.results = [] #initialize empty list to store results
         self.df = pd.DataFrame(columns=['Plot','Subplot','Date','Exposure','Focus','Openness']) #initializing empty dataframe
-        self.df['Plot'] = [i.split('.')[0] for i in self.images]  # get first item in list of images
-        self.df['Subplot'] = [i.split('.')[1] for i in self.images]  # get subplot information (second item)
-        self.df['Date'] = [i.split('.')[2] for i in self.images]  # get date information (third item)
-        self.df['Exposure'] = [i.split('.')[3] for i in self.images]  # get exposure information (fourth item)
-        self.df['Focus'] = [i.split('.')[4] for i in self.images] # get focus (manual or auto) information (fifth item)
+
+        # dataframe output (iterate through images)
+        for image in self.images:
+            #if camera focus information is available
+            if image.count('.')==5:
+                #include all 5 columns in dataframe
+                self.df['Plot'] = [i.split('.')[0] for i in self.images]  # get first item in list of images
+                self.df['Subplot'] = [i.split('.')[1] for i in self.images]  # get subplot information (second item)
+                self.df['Date'] = [i.split('.')[2] for i in self.images]  # get date information (third item)
+                self.df['Exposure'] = [i.split('.')[3] for i in self.images]  # get exposure information (fourth item)
+                self.df['Focus'] = [i.split('.')[4] for i in self.images] # get focus (manual or auto) information (fifth item)
+            #if camera focus information is not available
+            else:
+                #don't split string on focus since it doesn't exist
+                self.df['Plot'] = [i.split('.')[0] for i in self.images]  # get first item in list of images
+                self.df['Subplot'] = [i.split('.')[1] for i in self.images]  # get subplot information (second item)
+                self.df['Date'] = [i.split('.')[2] for i in self.images]  # get date information (third item)
+                self.df['Exposure'] = [i.split('.')[3] for i in self.images]  # get exposure information (fourth item
 
     # Function to iterate through directory and get dataframe of openness values for each image in directory 
     def Batch(self):
