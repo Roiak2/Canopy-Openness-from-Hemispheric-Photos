@@ -88,7 +88,14 @@ class FishEye():
         #y coordinate of center
         self.cy = int(self.shape[0]/2)
         #radius of the hemispheric photo center
-        self.cr = int((self.shape[0]/2)-150)
+        #if the photo dimensions are small
+        if self.shape[0] < 2000:
+            #set tighter radius
+            self.cr = int((self.shape[0]/2)-350)
+        #if photo dimensions are normal
+        else:
+            #set radius normally
+            self.cr = int((self.shape[0]/2)-150)
 
         #if only processing single image
         if self.batch == False:
