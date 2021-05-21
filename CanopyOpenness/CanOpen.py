@@ -38,11 +38,20 @@ class CanOpen():
         """
         #input (image file from ImageLoad class object)
         self.fisheye = fisheye #image
+        #self.shape = self.fisheye[0].shape #setting shape of image
         self.batch = batch #boolean, if true processing in batch so changes logger messages, defaults to false
 
         # get x,y and r of circle
         self.cx = self.fisheye[1]
         self.cy = self.fisheye[2]
+        # #if the photo dimensions are small
+        # if self.fisheye[0].shape[0] < 2000:
+        #     #set tighter radius
+        #     self.cr = int((self.cy/2)-350)
+        # #if photo dimensions are normal
+        # else:
+        #     #set radius normally
+        #     self.cr = self.fisheye[3]
         self.cr = self.fisheye[3]
 
         #variables for calculating gap fraction, area, and canopy openness
