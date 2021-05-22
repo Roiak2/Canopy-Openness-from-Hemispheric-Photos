@@ -97,7 +97,7 @@ class FishEye():
             #set radius by x coordinate and make sure within bounds
             self.cr = self.cx-210
         #if photo dimensions are normal
-        else:
+        if self.shape[1] > 2000:
             #set radius normally
             self.cr = self.cy-150
 
