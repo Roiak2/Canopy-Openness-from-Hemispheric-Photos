@@ -89,9 +89,13 @@ class FishEye():
         self.cy = int(self.shape[0]/2)
         #radius of the hemispheric photo center
         #if the photo dimensions are small
-        if self.shape[1] < 2000:
+        if self.shape[1] < 2000 and self.shape[0] > 1201:
             #set tighter radius
             self.cr = self.cy-350
+        #if the photo dimensions are even smaller
+        if self.shape[1] <2000 and self.shape[0] < 1201:
+            #set radius by x coordinate and make sure within bounds
+            self.cr = self.cx-210
         #if photo dimensions are normal
         else:
             #set radius normally
