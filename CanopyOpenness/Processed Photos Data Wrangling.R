@@ -54,6 +54,12 @@ seed <- read_csv(paste0(local_path,"Seedlings_all.csv"),
                  col_types = cols(Date = col_character(),
                                   Focus = col_character()))
 
+#loading openness data for seedling 2020 plots
+seed20 <- read_csv(paste0(local_path,"Seedlings_2020_Preprocessed.csv"),
+                 col_types = cols(Date = col_character(),
+                                  Focus = col_character()))
+
+
 ####------------------------------LFDP 40 POINTS---------------------------####
 
 ####---Adding Coordinates---####
@@ -197,3 +203,26 @@ write_csv(seed3, paste0(local_path,"Seedlings_Full.csv"))
 rm(list = ls())
 gc()
 
+
+####---2020 Data---####
+#Turning into day month year column
+seed20 <- seed20 %>%
+  mutate(Date = lubridate::dmy(seed20$Date))
+
+
+#Fixing datetime columns and adding month and year for easier analysis
+seed20 <- seed20 %>%
+  mutate(Year = lubridate::year(Date), # adding separate columns for year and month
+         Month = lubridate::month(Date)) %>%
+  relocate(Plot,Subplot,Date,Year,Month,Exposure,Focus,Openness) %>% #organizing column order
+  arrange(Plot,Subplot,Date) #arranging dates within subplots
+
+
+####---Saving Data---####
+
+#writing table to file
+write_csv(seed20, paste0(local_path,"Seedlings2020_Full.csv"))
+
+#cleaning
+rm(list = ls())
+gc()
