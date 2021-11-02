@@ -1,6 +1,6 @@
 ####--------------------DATA WRANGLING CANOPY OPENNESS--------------------####
 
-# Roí A.K., May 2021
+# Roí A.K., October 2021
 # Columbia University, NY, NY
 
 ####------------------------------OVERVIEW--------------------------------####
@@ -43,11 +43,13 @@ local_path <- "C:/Users/roiak/Documents/Damage Project/Canopy Photo Processing/D
 
 #loading openness data for LFDP 40 points
 lfdp <- read_csv(paste0(local_path,"LFDP_all.csv"))
+lfdp_21 <- read_csv(paste0(local_path,"LFDP_2021_Preprocessed.csv"))
 #loading coordinate data
 coord <- read_csv(paste0(local_path,"Coords_40_Points.csv"))
 
 #loading openness data for CTE
 cte <- read_csv(paste0(local_path,"CTE_all.csv"))
+cte_21 <- read_csv(paste0(local_path,"CTE_2021_Preprocessed.csv"))
 
 #loading openness data for seedling plots
 seed <- read_csv(paste0(local_path,"Seedlings_all.csv"),
@@ -58,6 +60,11 @@ seed <- read_csv(paste0(local_path,"Seedlings_all.csv"),
 seed20 <- read_csv(paste0(local_path,"Seedlings_2020_Preprocessed.csv"),
                  col_types = cols(Date = col_character(),
                                   Focus = col_character()))
+
+#seedlings 2021 data
+seed21 <- read_csv(paste0(local_path,"Seedlings_2021_Preprocessed.csv"),
+                   col_types = cols(Date = col_character(),
+                                    Focus = col_character()))
 
 
 ####------------------------------LFDP 40 POINTS---------------------------####
@@ -91,6 +98,37 @@ write_csv(merged_d, paste0(local_path,"LFDP_40_PointsFull.csv"))
 #cleaning
 rm(merged_d,lfdp,coord)
 
+
+#--2021 DATA--#
+
+#merging two data files based on subplot (i.e. one of the 40 points)
+merged_d <- left_join(lfdp_21,coord, by="Subplot")
+
+####---Creating Year and Month Columns---####
+
+#Fixing datetime columns and adding month and year for easier analysis
+merged_d <- merged_d %>%
+  mutate(Plot = "LFDP", #making sure plots say lfdp
+         Date = lubridate::dmy(merged_d$Date),#turning date into a day, month, year column using lubridate
+         Year = lubridate::year(Date), # adding separate columns for year and month
+         Month = lubridate::month(Date)) %>%
+  relocate(Plot,Subplot,Date,Year,Month,X,Y,Exposure,Focus,Openness) %>% #organizing column order
+  arrange(Plot,Subplot,Date) #arranging by date within each subplot
+
+#checking
+str(lfdp_21$Date) #Old data still as character
+str(merged_d$Date) #merged data as date
+
+
+####---Saving Data---####
+
+#Writing table to file
+write_csv(merged_d, paste0(local_path,"LFDP_2021_40PointsFull.csv"))
+
+#cleaning
+rm(merged_d,lfdp,coord)
+
+
 ####-------------------------------------CTE-------------------------------####
 
 ####---Creating Year and Month Columns---####
@@ -122,6 +160,39 @@ write_csv(cte2, paste0(local_path,"CTE_Full.csv"))
 
 #cleaning
 rm(cte,cte2)
+
+
+##--2021 DATA--##
+
+####---Creating Year and Month Columns---####
+
+#Fixing datetime columns and adding month and year for easier analysis
+cte_21_2 <- cte_21 %>%
+  mutate(Date = lubridate::dmy(cte_21$Date),#turning date into a day, month, year column using lubridate
+         Year = lubridate::year(Date), # adding separate columns for year and month
+         Month = lubridate::month(Date)) %>%
+  relocate(Plot,Subplot,Date,Year,Month,Exposure,Focus,Openness) %>% #organizing column order
+  arrange(Plot,Subplot,Date) #organizing by date within subplot
+
+#checking
+str(cte_21$Date) #old date as character
+str(cte_21_2$Date) #new data as date
+
+####---Creating treatment and subplot columns---####
+
+#separating the Subplot column into treatment and then subplot (i.e. location of photo)
+cte_21_2 <- cte_21_2 %>%
+  separate(Subplot, 
+           sep = "-", 
+           into = c("Treatment","Subplot"))
+
+####---Saving Data---####
+
+#writing table to file
+write_csv(cte_21_2, paste0(local_path,"CTE_2021_Full.csv"))
+
+#cleaning
+rm(cte_21_2,cte_21_2)
 
 ####----------------------------------SEEDLINGS----------------------------####
 
@@ -222,6 +293,29 @@ seed20 <- seed20 %>%
 
 #writing table to file
 write_csv(seed20, paste0(local_path,"Seedlings2020_Full.csv"))
+
+#cleaning
+rm(seed20)
+gc()
+
+####---2021 Data---####
+#Turning into day month year column
+seed21 <- seed21 %>%
+  mutate(Date = lubridate::dmy(seed21$Date))
+
+
+#Fixing datetime columns and adding month and year for easier analysis
+seed21 <- seed21 %>%
+  mutate(Year = lubridate::year(Date), # adding separate columns for year and month
+         Month = lubridate::month(Date)) %>%
+  relocate(Plot,Subplot,Date,Year,Month,Exposure,Focus,Openness) %>% #organizing column order
+  arrange(Plot,Subplot,Date) #arranging dates within subplots
+
+
+####---Saving Data---####
+
+#writing table to file
+write_csv(seed21, paste0(local_path,"Seedlings2021_Full.csv"))
 
 #cleaning
 rm(list = ls())
